@@ -1,6 +1,6 @@
 {
-  "name": "Chrome React Extension",
-  "description": "The power of React and TypeScript for building interactive Chrome extensions",
+  "name": "Chrome Hotel comparison Extension",
+  "description": "Hotel rate comparison Chrome extensions",
   "version": "1.0",
   "manifest_version": 3,
   "action": {

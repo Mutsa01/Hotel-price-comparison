@@ -2,8 +2,12 @@
   text-align: center;
 }
 
+.company-name{
+  font-family: 'Martian Mono', monospace;
+}
+
 .App-logo {
-  height: 40vmin;
+  height: 10vmin;
   pointer-events: none;
 }
 
@@ -15,11 +19,11 @@
 
 .App-header {
   background-color: #282c34;
-  min-height: 100vh;
+  height: 15vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: white;
 }
@@ -36,3 +40,24 @@
     transform: rotate(360deg);
   }
 }
+
+.exit-icon{
+  height: 15px;
+}
+
+.exit-box {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background-color: #282c34;
+  -webkit-transition: background-color 2s ease-out;
+  -moz-transition: background-color 2s ease-out;
+  -o-transition: background-color 2s ease-out;
+  transition: background-color 2s ease-out;
+}
+
+.exit-box:hover {
+  background-color: whitesmoke;
+  cursor: pointer;
+}
+
