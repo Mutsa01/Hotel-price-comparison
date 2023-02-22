@@ -3,10 +3,6 @@
   "description": "Hotel rate comparison Chrome extensions",
   "version": "1.0",
   "manifest_version": 3,
-  "background": {
-    "scripts": ["./static/js/background.js"],
-    "persistent": false
-  },
   "action": {
       "default_popup": "index.html",
       "default_title": "Open the popup"

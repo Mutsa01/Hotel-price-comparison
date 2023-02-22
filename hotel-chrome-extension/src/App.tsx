@@ -12,13 +12,16 @@ function App() {
     window.close();
   };
 
+  // react useState hook to store data from DOM
   const [title, setTitle] = React.useState('');
   const [headlines, setHeadlines] = React.useState<string[]>([]);
+  const [hotelName, setHotelName] = React.useState('');
+  const [hotelPrice, setHotelPrice] = React.useState('');
 
   React.useEffect(() => {
     /**
-     * We can't use "chrome.runtime.sendMessage" for sending messages from React.
-     * For sending messages from React we need to specify which tab to send it to.
+     * can't use "chrome.runtime.sendMessage" for sending messages from React.
+     * For sending messages from React need to specify which tab to send it to.
      */
     chrome.tabs && chrome.tabs.query({
       active: true,
@@ -32,11 +35,14 @@ function App() {
        * in the specified tab for the current extension.
        */
       chrome.tabs.sendMessage(
+        // specify tab to send message to
         tabs[0].id || 0,
         { type: 'GET_DOM' } as DOMMessage,
         (response: DOMMessageResponse) => {
           setTitle(response.title);
           setHeadlines(response.headlines);
+          setHotelName(response.hotelName);
+          setHotelPrice(response.hotelPrice);
         });
     });
   });
@@ -57,9 +63,13 @@ function App() {
           <img src={search} className="bottom-nav-item" alt="search icon" />
           <img src={house} className="bottom-nav-item" alt="home icon" />
           <img src={plus} className="bottom-nav-item" alt="plus icon" />
-          <span className={`SEOValidationFieldStatus ${headlines.length !== 1 ? 'Error' : 'Ok'}`}>
-              {headlines.length}
-            </span>
+          <text>
+            {hotelPrice}
+          </text>
+          {/* enter hotel name returned */}
+          <text>
+            {hotelName}
+          </text>
         </div>
       </body>
     </div>

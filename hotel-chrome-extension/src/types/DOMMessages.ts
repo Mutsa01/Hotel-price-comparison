@@ -5,4 +5,6 @@ export type DOMMessage = {
   export type DOMMessageResponse = {
     title: string;
     headlines: string[];
+    hotelName: string;
+    hotelPrice: string;
   }
