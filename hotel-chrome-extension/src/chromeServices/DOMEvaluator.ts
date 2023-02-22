@@ -5,7 +5,11 @@ const messagesFromReactAppListener = (msg: DOMMessage, sender: chrome.runtime.Me
 
   const response: DOMMessageResponse = {
     title: document.title,
-    headlines: Array.from(document.getElementsByTagName<"h1">("h1")).map(h1 => h1.innerText)
+    headlines: Array.from(document.getElementsByTagName<"h1">("h1")).map(h1 => h1.innerText),
+    //get hotelname from element <span class="l-property-name "></span>
+    hotelName: (document.querySelector(".l-property-name ") as HTMLElement).innerText,
+    //get hotelPrice from elemnet <span class="t-price  m-display-block "></span> but waittill element added 
+    hotelPrice: (document.querySelector(".t-price") as HTMLElement).innerText
   };
 
   console.log('[content.js]. Message response', response);
