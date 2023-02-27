@@ -160,6 +160,11 @@
   max-height: calc(100vh - 160px); /* Limit max height to prevent overflowing */
 }
 
+/* hide scroll bar in providers list */
+/* .providers-list::-webkit-scrollbar {
+  display: none;
+} */
+
 .provider-card{
   width: 210px;
   height: 38px;
