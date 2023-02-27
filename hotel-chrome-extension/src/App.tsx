@@ -2,7 +2,7 @@ import React from 'react';
 import logo from './new_logo.svg';
 import exit from './grey_exit_icon.svg';
 import search from './icons/search_icon.svg';
-import house from'./icons/house_icon1.svg';
+import house from './icons/house_icon1.svg';
 import plus from './icons/plus_grey.svg';
 import './App.css';
 import { DOMMessage, DOMMessageResponse } from './types';
@@ -55,10 +55,33 @@ function App() {
           Cosmic Rates
         </span>
         <div className="exit-box" onClick={handleExitClick}>
-          <img src={exit} className='exit-icon' alt='exit icon'/>
+          <img src={exit} className='exit-icon' alt='exit icon' />
         </div>
       </header>
       <body>
+        <div className="content-container">
+        <div className="providers-list">
+          <a className="provider-card-wrapper">
+            <div className="provider-card">
+            </div>
+          </a>
+          <a className="provider-card-wrapper">
+            <div className="provider-card">
+            </div>
+          </a>
+          <a className="provider-card-wrapper">
+            <div className="provider-card">
+            </div>
+          </a>
+          <a className="provider-card-wrapper">
+            <div className="provider-card">
+            </div>
+          </a>
+          <a className="provider-card-wrapper">
+            <div className="provider-card">
+            </div>
+          </a>
+        </div>
         <div className="bottom-nav-container">
           <img src={search} className="bottom-nav-item" alt="search icon" />
           <img src={house} className="bottom-nav-item" alt="home icon" />
@@ -70,6 +93,7 @@ function App() {
           <text>
             {hotelName}
           </text>
+        </div>
         </div>
       </body>
     </div>
