@@ -17,7 +17,24 @@ function App() {
   const [headlines, setHeadlines] = React.useState<string[]>([]);
   const [hotelName, setHotelName] = React.useState('');
   const [hotelPrice, setHotelPrice] = React.useState('');
+  const [tripRecievedPrice, setTripRecievedPrice] = React.useState('');
 
+  //pass hotelName to trip_scraper.js dunction and get hotel price
+
+  function getHotelPrice(hotelName: string) {
+    fetch(`http://localhost:5000/get-hotel-price/${hotelName}`)
+      .then(response => response.json())
+      .then(data => {
+        // handle the response data here
+        setTripRecievedPrice(data);
+        console.log(data);
+      })
+      .catch(error => {
+        // handle any errors here
+        console.error('There was a problem with the fetch operation:', error);
+      });
+  }
+  
   React.useEffect(() => {
     /**
      * can't use "chrome.runtime.sendMessage" for sending messages from React.
@@ -43,6 +60,7 @@ function App() {
           setHeadlines(response.headlines);
           setHotelName(response.hotelName);
           setHotelPrice(response.hotelPrice);
+          getHotelPrice(response.hotelName);
         });
     });
   });

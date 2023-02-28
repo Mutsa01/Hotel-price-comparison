@@ -43,3 +43,5 @@ async function getPrice(hotelName) {
     await browser.close();
     return price;
 }
+
+export{getPrice}
