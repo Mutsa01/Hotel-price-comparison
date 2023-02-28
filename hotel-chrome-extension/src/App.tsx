@@ -17,7 +17,7 @@ function App() {
   const [headlines, setHeadlines] = React.useState<string[]>([]);
   const [hotelName, setHotelName] = React.useState('');
   const [hotelPrice, setHotelPrice] = React.useState('');
-  const [tripRecievedPrice, setTripRecievedPrice] = React.useState('');
+  const [tripRecievedPrice, setTripHotelPrice] = React.useState('');
 
   //pass hotelName to trip_scraper.js dunction and get hotel price
 
@@ -26,8 +26,9 @@ function App() {
       .then(response => response.json())
       .then(data => {
         // handle the response data here
-        setTripRecievedPrice(data);
+        setTripHotelPrice(JSON.stringify(data));
         console.log(data);
+        console.log(tripRecievedPrice);
       })
       .catch(error => {
         // handle any errors here
@@ -63,7 +64,7 @@ function App() {
           getHotelPrice(response.hotelName);
         });
     });
-  });
+  }, []);
 
   return (
     <div className="App">
@@ -78,40 +79,45 @@ function App() {
       </header>
       <body>
         <div className="content-container">
-        <div className="providers-list">
-          <a className="provider-card-wrapper">
-            <div className="provider-card">
-            </div>
-          </a>
-          <a className="provider-card-wrapper">
-            <div className="provider-card">
-            </div>
-          </a>
-          <a className="provider-card-wrapper">
-            <div className="provider-card">
-            </div>
-          </a>
-          <a className="provider-card-wrapper">
-            <div className="provider-card">
-            </div>
-          </a>
-          <a className="provider-card-wrapper">
-            <div className="provider-card">
-            </div>
-          </a>
-        </div>
-        <div className="bottom-nav-container">
-          <img src={search} className="bottom-nav-item" alt="search icon" />
-          <img src={house} className="bottom-nav-item" alt="home icon" />
-          <img src={plus} className="bottom-nav-item" alt="plus icon" />
-          <text>
-            {hotelPrice}
-          </text>
-          {/* enter hotel name returned */}
-          <text>
-            {hotelName}
-          </text>
-        </div>
+          <div className="providers-list">
+            <a className="provider-card-wrapper">
+              <div className="provider-card">
+                {/* show the result of the gethotelprice function*/}
+                
+                {tripRecievedPrice !=='' && (
+                    <text> {tripRecievedPrice} </text>
+                )}
+              </div>
+            </a>
+            <a className="provider-card-wrapper">
+              <div className="provider-card">
+              </div>
+            </a>
+            <a className="provider-card-wrapper">
+              <div className="provider-card">
+              </div>
+            </a>
+            <a className="provider-card-wrapper">
+              <div className="provider-card">
+              </div>
+            </a>
+            <a className="provider-card-wrapper">
+              <div className="provider-card">
+              </div>
+            </a>
+          </div>
+          <div className="bottom-nav-container">
+            <img src={search} className="bottom-nav-item" alt="search icon" />
+            <img src={house} className="bottom-nav-item" alt="home icon" />
+            <img src={plus} className="bottom-nav-item" alt="plus icon" />
+            <text>
+              {hotelPrice}
+            </text>
+            {/* enter hotel name returned */}
+            <text>
+              {hotelName}
+            </text>
+          </div>
         </div>
       </body>
     </div>
