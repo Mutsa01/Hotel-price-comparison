@@ -17,12 +17,14 @@ function App() {
   const [headlines, setHeadlines] = React.useState<string[]>([]);
   const [hotelName, setHotelName] = React.useState('');
   const [hotelPrice, setHotelPrice] = React.useState('');
+  const [hotelRoom, setHotelRoom] = React.useState('');
   const [tripRecievedPrice, setTripHotelPrice] = React.useState('');
 
   //pass hotelName to trip_scraper.js dunction and get hotel price
 
-  function getHotelPrice(hotelName: string) {
-    fetch(`http://localhost:5000/get-hotel-price/${hotelName}`)
+  function getHotelPrice(hotelName: string, hotelRoom: string) {
+    //make a fetch request to the backend with the hotel name and room type
+    fetch(`http://localhost:5000/get-hotel-price/${hotelName}/${hotelRoom}`)
       .then(response => response.json())
       .then(data => {
         // handle the response data here
@@ -61,7 +63,8 @@ function App() {
           setHeadlines(response.headlines);
           setHotelName(response.hotelName);
           setHotelPrice(response.hotelPrice);
-          getHotelPrice(response.hotelName);
+          setHotelRoom(response.hotelRoom);
+          getHotelPrice(response.hotelName, response.hotelRoom);
         });
     });
   }, []);
@@ -85,16 +88,21 @@ function App() {
                 {/* show the result of the gethotelprice function*/}
                 
                 {tripRecievedPrice !=='' && (
-                    <text> {tripRecievedPrice} </text>
+                    <text> 
+                      {tripRecievedPrice} </text>
                 )}
               </div>
             </a>
             <a className="provider-card-wrapper">
               <div className="provider-card">
+                <text>
+                  {hotelName}
+                </text>
               </div>
             </a>
             <a className="provider-card-wrapper">
               <div className="provider-card">
+                {hotelRoom}
               </div>
             </a>
             <a className="provider-card-wrapper">

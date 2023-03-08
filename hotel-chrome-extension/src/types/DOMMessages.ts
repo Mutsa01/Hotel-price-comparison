@@ -6,5 +6,6 @@ export type DOMMessage = {
     title: string;
     headlines: string[];
     hotelName: string;
-    hotelPrice: string;
+    hotelRoom: string;
+    hotelPrice: string; 
   }
