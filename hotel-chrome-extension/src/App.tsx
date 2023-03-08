@@ -105,12 +105,6 @@ function App() {
                   <text> {tripRecievedPrice} </text>
                 )}
 
-                {/* {tripRecievedPrice !== '' && (
-                  <text>
-                    {tripRecievedPrice} </text>
-                )} */}
-
-
               </div>
             </a>
             <a className="provider-card-wrapper">
