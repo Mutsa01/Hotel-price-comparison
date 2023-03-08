@@ -1,13 +1,14 @@
 .App {
   text-align: center;
-    width: 350px;
-    height: 400px;
+  width: 350px;
+  height: 400px;
 }
 
 
-.content-container{
+.content-container {
   position: absolute;
-  top: 15vh;;
+  top: 15vh;
+  ;
   left: 0;
   right: 0;
   bottom: 0;
@@ -19,7 +20,7 @@
 }
 
 
-.company-name{
+.company-name {
   font-family: 'Martian Mono', monospace;
 }
 
@@ -33,7 +34,7 @@
     animation: App-logo-spin infinite 20s linear;
   }
 }
-  
+
 .App-header {
   background-color: #282c34;
   height: 15vh;
@@ -56,12 +57,13 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
 }
 
-.exit-icon{
+.exit-icon {
   height: 15px;
 }
 
@@ -81,9 +83,9 @@
   cursor: pointer;
 }
 
-.bottom-nav-container{
+.bottom-nav-container {
   height: 50px;
-  width : 75%;
+  width: 75%;
   /* padding-left:12% ; */
   background-color: #282c34;
   /* bottom: -325px; */
@@ -145,7 +147,7 @@
   background-color: #48d660;
 }
 
-.providers-list{
+.providers-list {
   /* background-color: #61dafb; */
   position: relative;
   display: flex;
@@ -157,7 +159,8 @@
   /* padding: 10px; */
   overflow-y: auto;
   /* margin-bottom: 60px; Add margin to bottom to make space for bottom nav */
-  max-height: calc(100vh - 160px); /* Limit max height to prevent overflowing */
+  max-height: calc(100vh - 160px);
+  /* Limit max height to prevent overflowing */
 }
 
 /* hide scroll bar in providers list */
@@ -165,7 +168,7 @@
   display: none;
 } */
 
-.provider-card{
+.provider-card {
   width: 210px;
   height: 38px;
   border-radius: 10px;
@@ -188,4 +191,6 @@
   cursor: pointer;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+
 

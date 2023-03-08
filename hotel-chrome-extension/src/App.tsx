@@ -6,6 +6,8 @@ import house from './icons/house_icon1.svg';
 import plus from './icons/plus_grey.svg';
 import './App.css';
 import { DOMMessage, DOMMessageResponse } from './types';
+import { trackPromise } from 'react-promise-tracker';
+import {ThreeDots} from 'react-loader-spinner'
 
 function App() {
   const handleExitClick = () => {
@@ -19,25 +21,30 @@ function App() {
   const [hotelPrice, setHotelPrice] = React.useState('');
   const [hotelRoom, setHotelRoom] = React.useState('');
   const [tripRecievedPrice, setTripHotelPrice] = React.useState('');
+  const[isLoading, setIsLoading] = React.useState(true);
 
   //pass hotelName to trip_scraper.js dunction and get hotel price
 
+
   function getHotelPrice(hotelName: string, hotelRoom: string) {
-    //make a fetch request to the backend with the hotel name and room type
-    fetch(`http://localhost:5000/get-hotel-price/${hotelName}/${hotelRoom}`)
-      .then(response => response.json())
-      .then(data => {
-        // handle the response data here
-        setTripHotelPrice(JSON.stringify(data));
-        console.log(data);
-        console.log(tripRecievedPrice);
-      })
-      .catch(error => {
-        // handle any errors here
-        console.error('There was a problem with the fetch operation:', error);
-      });
+    trackPromise(
+      //make a fetch request to the backend with the hotel name and room type
+      fetch(`http://localhost:5000/get-hotel-price/${hotelName}/${hotelRoom}`)
+        .then(response => response.json())
+        .then(data => {
+          // handle the response data here
+          setTripHotelPrice(JSON.stringify(data));
+          setIsLoading(false);
+          console.log(data);
+          console.log(tripRecievedPrice);
+        })
+        .catch(error => {
+          // handle any errors here
+          console.error('There was a problem with the fetch operation:', error);
+          setIsLoading(false);
+        }));
   }
-  
+
   React.useEffect(() => {
     /**
      * can't use "chrome.runtime.sendMessage" for sending messages from React.
@@ -86,11 +93,24 @@ function App() {
             <a className="provider-card-wrapper">
               <div className="provider-card">
                 {/* show the result of the gethotelprice function*/}
-                
-                {tripRecievedPrice !=='' && (
-                    <text> 
-                      {tripRecievedPrice} </text>
+                {isLoading ? (
+                  <div className="spinner-container" role="status">
+                    <ThreeDots
+                    color= "#282c34"
+                    width= "60"
+                    />
+                    {/* <span className="visually-hidden">Loading now...</span> */}
+                  </div>
+                ) : (
+                  <text> {tripRecievedPrice} </text>
                 )}
+
+                {/* {tripRecievedPrice !== '' && (
+                  <text>
+                    {tripRecievedPrice} </text>
+                )} */}
+
+
               </div>
             </a>
             <a className="provider-card-wrapper">

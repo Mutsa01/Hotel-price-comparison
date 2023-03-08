@@ -48,10 +48,22 @@ async function getPrice(hotelName, roomType) {
     await page.click('.btn-bottom');
     const newPage = await newPagePromise;
 
-    //wait before the new page is loaded
-    await delay(2000);
-    //once tab is opened, wait for the class room-name to be loaded
-    await newPage.waitForSelector('.room-name', { timeout: 50000 });
+    //wait for the class room-name to be loaded, retrying a few times if necessary
+    let retries = 3;
+    while (retries > 0) {
+        try {
+            await newPage.waitForSelector('.room-name', { timeout: 5000 });
+            break;
+        } catch (error) {
+            retries--;
+            console.log(`Error: ${error.message}. Retrying...`);
+        }
+    }
+
+    //if the selector could not be found after multiple retries, throw an error
+    if (retries === 0) {
+        throw new Error('Timeout: Could not find the .room-name selector.');
+    }
 
     const roomData = await newPage.evaluate(() => {
         const avaiableRooms = document.querySelectorAll('.room-card-item');
