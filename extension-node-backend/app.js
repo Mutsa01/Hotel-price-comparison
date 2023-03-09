@@ -21,8 +21,9 @@ app.get('/newEndpoint', (req, res) => {
     const hotelName = req.params.hotelName;
     const hotelRoom = req.params.hotelRoom;
     console.log(`Getting price for hotel: ${hotelName} , room: ${hotelRoom}`);
-    const price = await getPrice(hotelName, hotelRoom);
-    res.send({ price });
+    const {price, tripHotelUrl} = await getPrice(hotelName, hotelRoom);
+    console.log(`Price: ${price}, tripHotelUrl: ${tripHotelUrl}`);
+    res.send({ price, tripHotelUrl });
   })
   
 

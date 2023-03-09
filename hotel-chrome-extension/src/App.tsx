@@ -9,7 +9,7 @@ import pointer from './icons/pointer-arrow.svg';
 import './App.css';
 import { DOMMessage, DOMMessageResponse } from './types';
 import { trackPromise } from 'react-promise-tracker';
-import {ThreeDots} from 'react-loader-spinner'
+import { ThreeDots } from 'react-loader-spinner'
 
 function App() {
   const handleExitClick = () => {
@@ -23,7 +23,8 @@ function App() {
   const [hotelPrice, setHotelPrice] = React.useState('');
   const [hotelRoom, setHotelRoom] = React.useState('');
   const [tripRecievedPrice, setTripHotelPrice] = React.useState('');
-  const[isLoading, setIsLoading] = React.useState(true);
+  const [tripRecievedUrl, setTripHotelUrl] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(true);
 
   //pass hotelName to trip_scraper.js dunction and get hotel price
 
@@ -35,7 +36,11 @@ function App() {
         .then(response => response.json())
         .then(data => {
           // handle the response data here
-          setTripHotelPrice(JSON.stringify(data));
+          const { price, tripHotelUrl } = data;
+          setTripHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
+          setTripHotelUrl(JSON.stringify(tripHotelUrl).replace(/['"]+/g, ''));
+          console.log(tripRecievedUrl)
+          console.log(data.tripHotelUrl)
           setIsLoading(false);
           console.log(data);
           console.log(tripRecievedPrice);
@@ -93,50 +98,61 @@ function App() {
         <div className="content-container">
           <div className="providers-list">
             <a className="provider-card-wrapper">
-              <div className="provider-card">
-                {/* show the result of the gethotelprice function*/}
-                {isLoading ? (
+              {/* show the result of the gethotelprice function*/}
+              {isLoading ? (
+                <div className="provider-card">
                   <div className="spinner-container" role="status">
                     <ThreeDots
-                    color= "#282c34"
-                    width= "60"
+                      color="#282c34"
+                      width="60"
                     />
-                    {/* <span className="visually-hidden">Loading now...</span> */}
                   </div>
-                ) : (
-                  <text> {tripRecievedPrice} </text>
-                )}
+                  {/* <span className="visually-hidden">Loading now...</span> */}
+                </div>
+              ) : (
+                <a className="provider-card" href={tripRecievedUrl} target="_blank">
+                  {/* console log url */}
+                  <div className="provider-logo-container">
+                    <img className="provider-image" src={tripLogo} alt="trip.com logo" />
+                  </div>
+                  <div className="provider-name">
+                    <text> Trip.com </text>
+                  </div>
+                  <div className="provider-price">
+                    <text> {tripRecievedPrice} </text>
+                  </div>
+                  <div className="pointer-arrow-container">
+                    <img className="pointer-arrow" src={pointer} />
+                  </div>
+                </a>
+              )}
 
-              </div>
+
             </a>
             <a className="provider-card-wrapper">
               <div className="provider-card">
                 <text>
-                  {hotelName}
+                  {/* {hotelName} */}
                 </text>
               </div>
             </a>
             <a className="provider-card-wrapper">
               <div className="provider-card">
-                {hotelRoom}
+                {/* {hotelRoom} */}
               </div>
             </a>
-            <a className="provider-card-wrapper">
-              <div className="provider-card">
+            <div className="provider-card-wrapper">
+              <a className="provider-card">
                 <div className="provider-logo-container">
-                  <img className="provider-image" src={tripLogo} alt="trip.com logo"/> 
                 </div>
                 <div className="provider-name">
-                  <text> Trip.com </text>
                 </div>
                 <div className="provider-price">
-                  <text> £344 </text>
                 </div>
                 <div className="pointer-arrow-container">
-                  <img className="pointer-arrow" src={pointer} />
                 </div>
-              </div>
-            </a>
+              </a>
+            </div>
             <a className="provider-card-wrapper">
               <div className="provider-card">
               </div>

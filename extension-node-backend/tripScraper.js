@@ -57,6 +57,7 @@ async function getPrice(hotelName, roomType) {
         } catch (error) {
             retries--;
             console.log(`Error: ${error.message}. Retrying...`);
+            await new Promise(resolve => setTimeout(resolve, 3000));
         }
     }
 
@@ -64,6 +65,9 @@ async function getPrice(hotelName, roomType) {
     if (retries === 0) {
         throw new Error('Timeout: Could not find the .room-name selector.');
     }
+
+    const tripHotelUrl = newPage.url();
+    console.log(tripHotelUrl);
 
     const roomData = await newPage.evaluate(() => {
         const avaiableRooms = document.querySelectorAll('.room-card-item');
@@ -92,9 +96,11 @@ async function getPrice(hotelName, roomType) {
         price = roomData[roomIndex].price;
         console.log(price);
     }
+    
 
     await browser.close();
-    return price;
+    console.log(tripHotelUrl);
+    return {price, tripHotelUrl };
 }
 
 module.exports = { getPrice }

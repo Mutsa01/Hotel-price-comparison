@@ -182,6 +182,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  text-decoration: none;
 }
 
 /* make provider card pop out on hover and increase shaddow*/
