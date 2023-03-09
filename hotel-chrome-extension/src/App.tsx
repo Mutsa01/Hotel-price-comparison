@@ -4,6 +4,8 @@ import exit from './grey_exit_icon.svg';
 import search from './icons/search_icon.svg';
 import house from './icons/house_icon1.svg';
 import plus from './icons/plus_grey.svg';
+import tripLogo from './providerLogos/trip-com-logo.jpeg';
+import pointer from './icons/pointer-arrow.svg';
 import './App.css';
 import { DOMMessage, DOMMessageResponse } from './types';
 import { trackPromise } from 'react-promise-tracker';
@@ -121,6 +123,18 @@ function App() {
             </a>
             <a className="provider-card-wrapper">
               <div className="provider-card">
+                <div className="provider-logo-container">
+                  <img className="provider-image" src={tripLogo} alt="trip.com logo"/> 
+                </div>
+                <div className="provider-name">
+                  <text> Trip.com </text>
+                </div>
+                <div className="provider-price">
+                  <text> £344 </text>
+                </div>
+                <div className="pointer-arrow-container">
+                  <img className="pointer-arrow" src={pointer} />
+                </div>
               </div>
             </a>
             <a className="provider-card-wrapper">
