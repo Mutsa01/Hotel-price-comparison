@@ -8,4 +8,6 @@ export type DOMMessage = {
     hotelName: string;
     hotelRoom: string;
     hotelPrice: string; 
+    arrivalDate: string;
+    departureDate: string;
   }

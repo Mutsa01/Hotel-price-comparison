@@ -17,10 +17,12 @@ app.get('/newEndpoint', (req, res) => {
     res.send('This is my new endpoint!')
   })
 
-  app.get('/get-hotel-price/:hotelName/:hotelRoom', async (req, res) => {
+  app.get('/get-hotel-price/:hotelName/:hotelRoom/:arrivalDate/:departureDate', async (req, res) => {
     const hotelName = req.params.hotelName;
     const hotelRoom = req.params.hotelRoom;
-    console.log(`Getting price for hotel: ${hotelName} , room: ${hotelRoom}`);
+    const arrivalDate = req.params.arrivalDate;
+    const departureDate = req.params.departureDate;
+    console.log(`Getting price for hotel: ${hotelName} , room: ${hotelRoom}, arrivalDate: ${arrivalDate}, departureDate: ${departureDate}`);
     const {price, tripHotelUrl} = await getPrice(hotelName, hotelRoom);
     console.log(`Price: ${price}, tripHotelUrl: ${tripHotelUrl}`);
     res.send({ price, tripHotelUrl });
