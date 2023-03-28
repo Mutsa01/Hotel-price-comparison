@@ -57,13 +57,14 @@ async function getPrice(hotelName, roomType) {
         } catch (error) {
             retries--;
             console.log(`Error: ${error.message}. Retrying...`);
+            // await newPage.goto(newPage.url(), { waitUntil: 'load' });
             await new Promise(resolve => setTimeout(resolve, 3000));
         }
     }
 
     //if the selector could not be found after multiple retries, throw an error
     if (retries === 0) {
-        throw new Error('Timeout: Could not find the .room-name selector.');
+        return {price: 'No rooms available', tripHotelUrl: 'https://uk.trip.com/?locale=en-gb'}
     }
 
     const tripHotelUrl = newPage.url();
@@ -90,7 +91,7 @@ async function getPrice(hotelName, roomType) {
 
     //find the index of the room type that matches the room type passed in the function
     if (roomMatch.bestMatch.rating < 0.3) {
-        throw new Error('No room type found');
+        return { price: 'No rooms available', tripHotelUrl}
     } else {
         const roomIndex = roomData.findIndex(room => room.name === roomMatch.bestMatch.target);
         price = roomData[roomIndex].price;
