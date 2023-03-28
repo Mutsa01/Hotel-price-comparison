@@ -38,14 +38,24 @@ function App() {
         .then(response => response.json())
         .then(data => {
           // handle the response data here
-          const { price, tripHotelUrl } = data;
-          setTripHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
-          setTripHotelUrl(JSON.stringify(tripHotelUrl).replace(/['"]+/g, ''));
-          console.log(tripRecievedUrl)
-          console.log(data.tripHotelUrl)
-          setIsLoading(false);
-          console.log(data);
-          console.log(tripRecievedPrice);
+          // console.log(data);
+          data.forEach((result: { provider: any; price: any; hotelUrl: any; }) => {
+            const {provider, price, hotelUrl} = result;
+            if (provider === 'trip') {
+              setTripHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
+              setTripHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
+              setIsLoading(false);
+            }
+          });
+
+          // const { price, hotelUrl } = data;
+          // setTripHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
+          // setTripHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
+          // console.log(tripRecievedUrl)
+          // console.log(data.hotelUrl)
+          // setIsLoading(false);
+          // console.log(data);
+          // console.log(tripRecievedPrice);
         })
         .catch(error => {
           // handle any errors here

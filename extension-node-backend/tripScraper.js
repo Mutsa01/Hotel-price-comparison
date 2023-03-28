@@ -14,7 +14,7 @@ function delay(time) {
     });
 }
 // This function will return the price of the first result on trip.com for the given hotel name
-async function getPrice(hotelName, roomType) {
+async function getTripPrice(hotelName, roomType) {
     const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 1700, height: 800 }, args: ['--start-maximized'], executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
     const page = await browser.newPage();
 
@@ -67,8 +67,8 @@ async function getPrice(hotelName, roomType) {
         return {price: 'No rooms available', tripHotelUrl: 'https://uk.trip.com/?locale=en-gb'}
     }
 
-    const tripHotelUrl = newPage.url();
-    console.log(tripHotelUrl);
+    const hotelUrl = newPage.url();
+    // console.log(hotelUrl);
 
     const roomData = await newPage.evaluate(() => {
         const avaiableRooms = document.querySelectorAll('.room-card-item');
@@ -100,8 +100,8 @@ async function getPrice(hotelName, roomType) {
     
 
     await browser.close();
-    console.log(tripHotelUrl);
-    return {price, tripHotelUrl };
+    // console.log(hotelUrl);
+    return {price, hotelUrl };
 }
 
-module.exports = { getPrice }
+module.exports = { getTripPrice }
