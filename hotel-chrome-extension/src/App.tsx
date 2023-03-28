@@ -22,17 +22,19 @@ function App() {
   const [hotelName, setHotelName] = React.useState('');
   const [hotelPrice, setHotelPrice] = React.useState('');
   const [hotelRoom, setHotelRoom] = React.useState('');
+  const [arrivalDate, setArrivalDate] = React.useState('');
+  const [departureDate, setDepartureDate] = React.useState('');
   const [tripRecievedPrice, setTripHotelPrice] = React.useState('');
   const [tripRecievedUrl, setTripHotelUrl] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
 
-  //pass hotelName to trip_scraper.js dunction and get hotel price
+  //pass hotelName to trip_scraper.js function and get hotel price
 
 
-  function getHotelPrice(hotelName: string, hotelRoom: string) {
+  function getHotelPrice(hotelName: string, hotelRoom: string, arrivalDate: string, departureDate: string) {
     trackPromise(
       //make a fetch request to the backend with the hotel name and room type
-      fetch(`http://localhost:5000/get-hotel-price/${hotelName}/${hotelRoom}`)
+      fetch(`http://localhost:5000/get-hotel-price/${hotelName}/${hotelRoom}/${arrivalDate}/${departureDate}`)
         .then(response => response.json())
         .then(data => {
           // handle the response data here
@@ -78,7 +80,12 @@ function App() {
           setHotelName(response.hotelName);
           setHotelPrice(response.hotelPrice);
           setHotelRoom(response.hotelRoom);
-          getHotelPrice(response.hotelName, response.hotelRoom);
+          setArrivalDate(response.arrivalDate);
+          setDepartureDate(response.departureDate);
+          console.log(response);
+
+          //pass hoteldetails to function which will make a fetch request to the backend
+          getHotelPrice(response.hotelName, response.hotelRoom, response.arrivalDate, response.departureDate);
         });
     });
   }, []);

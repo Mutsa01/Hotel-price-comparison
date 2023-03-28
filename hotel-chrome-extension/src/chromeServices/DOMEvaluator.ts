@@ -3,6 +3,8 @@ import { DOMMessage, DOMMessageResponse } from '../types';
 const messagesFromReactAppListener = (msg: DOMMessage, sender: chrome.runtime.MessageSender, sendResponse: (response: DOMMessageResponse) => void) => {
   console.log('[content.js]. Message received', msg);
 
+  const tripDates = document.querySelectorAll(".m-date-text") as NodeListOf<HTMLElement>;
+
   const response: DOMMessageResponse = {
     title: document.title,
     headlines: Array.from(document.getElementsByTagName<"h1">("h1")).map(h1 => h1.innerText),
@@ -13,7 +15,13 @@ const messagesFromReactAppListener = (msg: DOMMessage, sender: chrome.runtime.Me
     hotelRoom: (document.querySelector(".l-room-type-label") as HTMLElement).innerText,
   
     //get hotelPrice from <span class="t-font-weight-bold t-font-mll t-line-height-xxl js-total-points-rate-value js-cash-and-point">  499.00  </span>
-    hotelPrice: (document.querySelector(".js-total-points-rate-value") as HTMLElement).innerText
+    hotelPrice: (document.querySelector(".js-total-points-rate-value") as HTMLElement).innerText,
+
+    //get arrival date from element tripDates[0]
+    arrivalDate: tripDates[0].innerText.trim(),
+
+    //get departure date from element tripDates[1]
+    departureDate: tripDates[1].innerText.trim()
   };
 
   console.log('[content.js]. Message response', response);
