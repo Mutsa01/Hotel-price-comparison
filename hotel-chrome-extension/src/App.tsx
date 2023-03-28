@@ -47,15 +47,6 @@ function App() {
               setIsLoading(false);
             }
           });
-
-          // const { price, hotelUrl } = data;
-          // setTripHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
-          // setTripHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
-          // console.log(tripRecievedUrl)
-          // console.log(data.hotelUrl)
-          // setIsLoading(false);
-          // console.log(data);
-          // console.log(tripRecievedPrice);
         })
         .catch(error => {
           // handle any errors here
