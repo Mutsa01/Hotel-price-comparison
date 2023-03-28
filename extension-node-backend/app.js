@@ -3,7 +3,7 @@ const app = express()
 const port = 5000
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const { getTripPrice } = require('./tripScraper');
+const { getTripPrice } = require('./scrapers/tripScraper');
 
 // Enable CORS and bodyParser middleware
 app.use(cors());
