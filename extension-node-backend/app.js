@@ -18,6 +18,7 @@ app.get('/newEndpoint', (req, res) => {
   res.send('This is my new endpoint!')
 })
 
+// This endpoint will return the price of the hotel rooms from different providers
 app.get('/get-hotel-price/:hotelName/:hotelRoom/:arrivalDate/:departureDate', async (req, res) => {
   const hotelName = req.params.hotelName;
   const hotelRoom = req.params.hotelRoom;
@@ -25,9 +26,11 @@ app.get('/get-hotel-price/:hotelName/:hotelRoom/:arrivalDate/:departureDate', as
   const departureDate = req.params.departureDate;
   console.log(`Getting price for hotel: ${hotelName} , room: ${hotelRoom}, arrivalDate: ${arrivalDate}, departureDate: ${departureDate}`);
 
+  // List of providers to get the price from
   const providers = [
     {
       name: 'trip.com',
+      // retry 3 times if an error occurs
       getPrice: () => getPriceWithRetry(() => getTripPrice(hotelName, hotelRoom))
     },
     {
@@ -36,6 +39,7 @@ app.get('/get-hotel-price/:hotelName/:hotelRoom/:arrivalDate/:departureDate', as
     }
   ]  
 
+  // Get the price from each provider in parallel
   const results = await Promise.all(
     providers.map(async (provider) => {
       const { price, hotelUrl } = await provider.getPrice();
@@ -52,12 +56,13 @@ app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
 
+// This function will retry the given function up to maxRetries times
 async function getPriceWithRetry(getPriceFunction, maxRetries = 3) {
   let retries = 0;
   while (retries < maxRetries) {
     try {
       const { price, hotelUrl } = await getPriceFunction();
-      // console.log(`Price: ${price}, hotelUrl: ${hotelUrl}`);
+      
       return { price, hotelUrl };
     } catch (error) {
       retries++;
