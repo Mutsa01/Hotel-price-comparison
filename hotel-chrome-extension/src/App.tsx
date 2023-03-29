@@ -5,6 +5,7 @@ import search from './icons/search_icon.svg';
 import house from './icons/house_icon1.svg';
 import plus from './icons/plus_grey.svg';
 import tripLogo from './providerLogos/trip-com-logo.jpeg';
+import hotelsComLogo from './providerLogos/hotels-com-logo.jpg';
 import pointer from './icons/pointer-arrow.svg';
 import './App.css';
 import { DOMMessage, DOMMessageResponse } from './types';
@@ -26,6 +27,8 @@ function App() {
   const [departureDate, setDepartureDate] = React.useState('');
   const [tripRecievedPrice, setTripHotelPrice] = React.useState('');
   const [tripRecievedUrl, setTripHotelUrl] = React.useState('');
+  const [hotelsComRecievedPrice, setHotelsComHotelPrice] = React.useState('');
+  const [hotelsComRecievedUrl, setHotelsComHotelUrl] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
 
   //pass hotelName to trip_scraper.js function and get hotel price
@@ -40,10 +43,14 @@ function App() {
           // handle the response data here
           // console.log(data);
           data.forEach((result: { provider: any; price: any; hotelUrl: any; }) => {
-            const {provider, price, hotelUrl} = result;
-            if (provider === 'trip') {
+            const { provider, price, hotelUrl } = result;
+            if (provider === 'trip.com') {
               setTripHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
               setTripHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
+              setIsLoading(false);
+            } else if (provider === 'hotels.com') {
+              setHotelsComHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
+              setHotelsComHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
               setIsLoading(false);
             }
           });
@@ -115,11 +122,9 @@ function App() {
                       width="60"
                     />
                   </div>
-                  {/* <span className="visually-hidden">Loading now...</span> */}
                 </div>
               ) : (
                 <a className="provider-card" href={tripRecievedUrl} target="_blank">
-                  {/* console log url */}
                   <div className="provider-logo-container">
                     <img className="provider-image" src={tripLogo} alt="trip.com logo" />
                   </div>
@@ -134,15 +139,34 @@ function App() {
                   </div>
                 </a>
               )}
-
-
             </a>
             <a className="provider-card-wrapper">
-              <div className="provider-card">
-                <text>
-                  {/* {hotelName} */}
-                </text>
-              </div>
+              {/* show the result of the gethotelprice function*/}
+              {isLoading ? (
+                <div className="provider-card">
+                  <div className="spinner-container" role="status">
+                    <ThreeDots
+                      color="#282c34"
+                      width="60"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <a className="provider-card" href={hotelsComRecievedUrl} target="_blank">
+                  <div className="provider-logo-container">
+                    <img className="provider-image" src={hotelsComLogo} alt="hotels.com logo" />
+                  </div>
+                  <div className="provider-name">
+                    <text> Hotels.com </text>
+                  </div>
+                  <div className="provider-price">
+                    <text> {hotelsComRecievedPrice} </text>
+                  </div>
+                  <div className="pointer-arrow-container">
+                    <img className="pointer-arrow" src={pointer} />
+                  </div>
+                </a>
+              )}
             </a>
             <a className="provider-card-wrapper">
               <div className="provider-card">

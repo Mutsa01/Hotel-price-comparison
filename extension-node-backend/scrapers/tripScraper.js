@@ -64,7 +64,9 @@ async function getTripPrice(hotelName, roomType) {
 
     //if the selector could not be found after multiple retries, throw an error
     if (retries === 0) {
-        return {price: 'No rooms available', tripHotelUrl: 'https://uk.trip.com/?locale=en-gb'}
+        // throw error
+        await browser.close();
+        throw new Error('error while scraping trip.com');
     }
 
     const hotelUrl = newPage.url();
@@ -91,7 +93,7 @@ async function getTripPrice(hotelName, roomType) {
 
     //find the index of the room type that matches the room type passed in the function
     if (roomMatch.bestMatch.rating < 0.3) {
-        return { price: 'No rooms available', tripHotelUrl}
+        return { price: 'No rooms available', hotelUrl}
     } else {
         const roomIndex = roomData.findIndex(room => room.name === roomMatch.bestMatch.target);
         price = roomData[roomIndex].price;
