@@ -37,7 +37,7 @@ app.get('/get-hotel-price/:hotelName/:hotelRoom/:arrivalDate/:departureDate', as
       name: 'hotels.com',
       getPrice: () => getPriceWithRetry(() => getHotelsPrice(hotelName, hotelRoom, arrivalDate, departureDate))
     }
-  ]  
+  ]
 
   // Get the price from each provider in parallel
   const results = await Promise.all(
@@ -62,7 +62,7 @@ async function getPriceWithRetry(getPriceFunction, maxRetries = 3) {
   while (retries < maxRetries) {
     try {
       const { price, hotelUrl } = await getPriceFunction();
-      
+
       return { price, hotelUrl };
     } catch (error) {
       retries++;

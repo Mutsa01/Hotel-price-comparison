@@ -93,17 +93,17 @@ async function getTripPrice(hotelName, roomType) {
 
     //find the index of the room type that matches the room type passed in the function
     if (roomMatch.bestMatch.rating < 0.3) {
-        return { price: 'No rooms available', hotelUrl}
+        return { price: 'No rooms available', hotelUrl }
     } else {
         const roomIndex = roomData.findIndex(room => room.name === roomMatch.bestMatch.target);
         price = roomData[roomIndex].price;
         console.log(price);
     }
-    
+
 
     await browser.close();
     // console.log(hotelUrl);
-    return {price, hotelUrl };
+    return { price, hotelUrl };
 }
 
 module.exports = { getTripPrice }

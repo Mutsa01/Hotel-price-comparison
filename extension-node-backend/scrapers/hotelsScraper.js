@@ -64,7 +64,6 @@ async function getHotelsPrice(hotelName, roomType, checkInDate, checkOutDate) {
     //click the first hotel of class uitk-link uitk-link-align-right uitk-link-layout-default uitk-link-medium
     await page.waitForSelector('.uitk-link.uitk-link-align-right.uitk-link-layout-default.uitk-link-medium', { timeout: 5000 });
     await page.click('.uitk-link.uitk-link-align-right.uitk-link-layout-default.uitk-link-medium');
-    // await new Promise(resolve => setTimeout(resolve, 4000));
 
     const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));
     const newPage = await newPagePromise;
