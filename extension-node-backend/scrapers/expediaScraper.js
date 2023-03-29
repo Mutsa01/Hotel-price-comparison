@@ -9,7 +9,7 @@ puppeteer.use(StealthPlugin())
 
 
 // This function will return the price of the a hotel for the given hotel name and room
-async function getHotelsPrice(hotelName, roomType, checkInDate, checkOutDate) {
+async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
     const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 700, height: 775 }, args: ['--start-maximized'], executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
 
     const checkIn = formatDate(checkInDate);
@@ -71,7 +71,6 @@ async function getHotelsPrice(hotelName, roomType, checkInDate, checkOutDate) {
     await new Promise(resolve => setTimeout(resolve, 4000));
 
     const hotelUrl = newPage.url();
-    console.log(hotelUrl);
 
     await new Promise(resolve => setTimeout(resolve, 400));
     newPage.evaluate(() => { window.scrollTo(0, window.innerHeight) });
@@ -113,7 +112,7 @@ async function getHotelsPrice(hotelName, roomType, checkInDate, checkOutDate) {
     }
 
     await browser.close();
-    return { price, HotelUrl };
+    return { price, hotelUrl };
 }
 
 function formatDate(dateString) {
@@ -124,4 +123,4 @@ function formatDate(dateString) {
     return [`${day}`, `${month} ${year}`];
 }
 
-module.exports = { getHotelsPrice };
+module.exports = { getExpediaPrice };

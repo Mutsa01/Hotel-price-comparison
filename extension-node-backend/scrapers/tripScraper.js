@@ -58,7 +58,7 @@ async function getTripPrice(hotelName, roomType) {
             retries--;
             console.log(`Error: ${error.message}. Retrying...`);
             // await newPage.goto(newPage.url(), { waitUntil: 'load' });
-            await new Promise(resolve => setTimeout(resolve, 3000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
         }
     }
 
