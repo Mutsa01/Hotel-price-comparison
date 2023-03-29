@@ -64,7 +64,9 @@ async function getTripPrice(hotelName, roomType) {
 
     //if the selector could not be found after multiple retries, throw an error
     if (retries === 0) {
-        return {price: 'No rooms available', hotelUrl: 'https://uk.trip.com/?locale=en-gb'}
+        // throw error
+        await browser.close();
+        throw new Error('error while scraping trip.com');
     }
 
     const hotelUrl = newPage.url();
