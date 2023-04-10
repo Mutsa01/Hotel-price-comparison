@@ -17,7 +17,7 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
 
     const page = await browser.newPage();
 
-    // Go to the Expedia website and search for the given hotel
+    // Go to the hotels.com website and search for the given hotel
     await page.goto('https://expedia.co.uk/');
 
     //click search field of class uitk-fake-input uitk-form-field-trigger
@@ -28,13 +28,13 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
     await page.waitForSelector('.uitk-field-input.uitk-typeahead-input.uitk-typeahead-input-v2', { timeout: 5000 });
     await new Promise(resolve => setTimeout(resolve, 2000));
     await page.type('.uitk-field-input.uitk-typeahead-input.uitk-typeahead-input-v2', hotelName);
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     //click on the first suggestion of class uitk-action-list-item-content
     await page.waitForSelector('button[data-stid="location-field-destination-result-item-button"]', { timeout: 5000 });
     await page.click('button[data-stid="location-field-destination-result-item-button"]');
 
-    await new Promise(resolve => setTimeout(resolve, 1000));
+    await new Promise(resolve => setTimeout(resolve, 2000));
 
     //click calander button of class uitk-faux-input uitk-form-field-trigger
     await page.waitForSelector('#d1-btn', { timeout: 5000 });
@@ -55,8 +55,6 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
     await page.waitForSelector('.uitk-button.uitk-button-large.uitk-button-fullWidth.uitk-button-has-text.uitk-button-primary.uitk-button-floating-full-width', { timeout: 5000 });
     await page.click('.uitk-button.uitk-button-large.uitk-button-fullWidth.uitk-button-has-text.uitk-button-primary.uitk-button-floating-full-width');
 
-    await new Promise(resolve => setTimeout(resolve, 400));
-
     //click the search button with id await page.click('[data-testid="submit-button"]');
     await page.waitForSelector('[data-testid="submit-button"]', { timeout: 5000 });
     await page.click('[data-testid="submit-button"]');
@@ -64,6 +62,7 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
     //click the first hotel of class uitk-link uitk-link-align-right uitk-link-layout-default uitk-link-medium
     await page.waitForSelector('.uitk-link.uitk-link-align-right.uitk-link-layout-default.uitk-link-medium', { timeout: 5000 });
     await page.click('.uitk-link.uitk-link-align-right.uitk-link-layout-default.uitk-link-medium');
+    // await new Promise(resolve => setTimeout(resolve, 4000));
 
     const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));
     const newPage = await newPagePromise;
@@ -71,25 +70,20 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
     await new Promise(resolve => setTimeout(resolve, 4000));
 
     const hotelUrl = newPage.url();
+    console.log(hotelUrl);
 
     await new Promise(resolve => setTimeout(resolve, 400));
     newPage.evaluate(() => { window.scrollTo(0, window.innerHeight) });
-
+    
     const roomData = await newPage.evaluate(() => {
 
-        // count num of elements with class uitk-spacing uitk-spacing-padding-blockstart-three uitk-spacing-padding-blockend-two uitk-spacing-padding-inline-three
-        const roomInfoCards = document.querySelectorAll('.uitk-spacing.uitk-spacing-padding-blockstart-three.uitk-spacing-padding-blockend-two.uitk-spacing-padding-inline-three');
-
-        // get price card  of class uitk-spacing uitk-spacing-padding-inline-three uitk-spacing-padding-blockend-three
-        const roomPriceCard = document.querySelectorAll('.uitk-spacing.uitk-spacing-padding-inline-three.uitk-spacing-padding-blockend-three');
-
         const rooms = [];
-        for (let i = 0; i < roomInfoCards.length; i++) {
-            const roomName = roomInfoCards[i].querySelector('.uitk-heading.uitk-heading-6').innerText.trim();
-            //get price in class uitk-text uitk-type-600 uitk-type-bold uitk-text-emphasis-theme
-            const roomPrice = roomPriceCard[i].querySelector('.uitk-text.uitk-type-600.uitk-type-bold.uitk-text-emphasis-theme').innerText.trim();
-            rooms.push({ name: roomName, price: roomPrice });
 
+        roomNamesList = document.querySelectorAll('.uitk-heading.uitk-heading-6');
+        roomPricesList = document.querySelectorAll('.uitk-text.uitk-type-600.uitk-type-bold.uitk-text-emphasis-theme');
+
+        for (let i = 0; i < roomNamesList.length; i++) {
+            rooms.push({ name: roomNamesList[i].innerText.trim(), price: roomPricesList[i].textContent.trim() });
         }
         return rooms;
     });
@@ -104,7 +98,7 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
     //find the index of the room type that matches the room type passed in the function
     if (roomMatch.bestMatch.rating < 0.3) {
         await browser.close();
-        return { price: 'No rooms available', hotelUrl}
+        return { price: 'No rooms available', hotelUrl }
     } else {
         const roomIndex = roomData.findIndex(room => room.name === roomMatch.bestMatch.target);
         price = roomData[roomIndex].price;

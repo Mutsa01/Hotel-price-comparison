@@ -73,6 +73,9 @@ async function getPriceWithRetry(getPriceFunction, maxRetries = 3) {
       retries++;
       console.log(`Error occurred, retrying (${retries}/${maxRetries})...`);
       await new Promise(resolve => setTimeout(resolve, 1000)); // wait for 1 second before retrying
+      if (retries === maxRetries) {
+        return  {price: 'Unavailable', hotelUrl: 'Unavailable'} ;
+      }
     }
   }
   throw new Error(`Failed to get price after ${maxRetries} retries`);

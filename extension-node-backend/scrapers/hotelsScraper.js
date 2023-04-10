@@ -76,6 +76,8 @@ async function getHotelsPrice(hotelName, roomType, checkInDate, checkOutDate) {
     await new Promise(resolve => setTimeout(resolve, 400));
     newPage.evaluate(() => { window.scrollTo(0, window.innerHeight) });
 
+    await newPage.waitForSelector('.uitk-heading.uitk-heading-6', { timeout: 15000 });
+
     const roomData = await newPage.evaluate(() => {
 
         // count num of elements with class uitk-spacing uitk-spacing-padding-blockstart-three uitk-spacing-padding-blockend-two uitk-spacing-padding-inline-three
@@ -85,12 +87,12 @@ async function getHotelsPrice(hotelName, roomType, checkInDate, checkOutDate) {
         const roomPriceCard = document.querySelectorAll('.uitk-spacing.uitk-spacing-padding-inline-three.uitk-spacing-padding-blockend-three');
 
         const rooms = [];
-        for (let i = 0; i < roomInfoCards.length; i++) {
-            const roomName = roomInfoCards[i].querySelector('.uitk-heading.uitk-heading-6').innerText.trim();
-            //get price in class uitk-text uitk-type-600 uitk-type-bold uitk-text-emphasis-theme
-            const roomPrice = roomPriceCard[i].querySelector('.uitk-text.uitk-type-600.uitk-type-bold.uitk-text-emphasis-theme').innerText.trim();
-            rooms.push({ name: roomName, price: roomPrice });
 
+        roomNamesList = document.querySelectorAll('.uitk-heading.uitk-heading-6');
+        roomPricesList = document.querySelectorAll('.uitk-text.uitk-type-600.uitk-type-bold.uitk-text-emphasis-theme');
+        
+        for (let i = 0; i < roomNamesList.length; i++) {
+            rooms.push({ name: roomNamesList[i].innerText.trim(), price: roomPricesList[i].textContent.trim() });
         }
         return rooms;
     });
@@ -105,7 +107,7 @@ async function getHotelsPrice(hotelName, roomType, checkInDate, checkOutDate) {
     //find the index of the room type that matches the room type passed in the function
     if (roomMatch.bestMatch.rating < 0.3) {
         await browser.close();
-        return { price: 'No rooms available', hotelUrl}
+        return { price: 'No rooms available', hotelUrl }
     } else {
         const roomIndex = roomData.findIndex(room => room.name === roomMatch.bestMatch.target);
         price = roomData[roomIndex].price;
