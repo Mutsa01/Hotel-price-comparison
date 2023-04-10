@@ -17,7 +17,7 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
 
     const page = await browser.newPage();
 
-    // Go to the hotels.com website and search for the given hotel
+    // Go to the expedia website and search for the given hotel
     await page.goto('https://expedia.co.uk/');
 
     //click search field of class uitk-fake-input uitk-form-field-trigger
