@@ -6,6 +6,7 @@ import house from './icons/house_icon1.svg';
 import plus from './icons/plus_grey.svg';
 import tripLogo from './providerLogos/trip-com-logo.jpeg';
 import hotelsComLogo from './providerLogos/hotels-com-logo.jpg';
+import expediaLogo from './providerLogos/expedia-logo.png';
 import pointer from './icons/pointer-arrow.svg';
 import './App.css';
 import { DOMMessage, DOMMessageResponse } from './types';
@@ -29,15 +30,23 @@ function App() {
   const [tripRecievedUrl, setTripHotelUrl] = React.useState('');
   const [hotelsComRecievedPrice, setHotelsComHotelPrice] = React.useState('');
   const [hotelsComRecievedUrl, setHotelsComHotelUrl] = React.useState('');
+  const [expediaRecievedPrice, setExpediaHotelPrice] = React.useState('');
+  const [expediaRecievedUrl, setExpediaHotelUrl] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
 
   //pass hotelName to trip_scraper.js function and get hotel price
 
 
   function getHotelPrice(hotelName: string, hotelRoom: string, arrivalDate: string, departureDate: string) {
+    //encode hotel name and room type to be passed to the backend as a url parameter
+    const encodedHotelName = encodeURIComponent(hotelName);
+    const encodedHotelRoom = encodeURIComponent(hotelRoom);
+    const encodedArrivalDate = encodeURIComponent(arrivalDate);
+    const encodedDepartureDate = encodeURIComponent(departureDate);
+
     trackPromise(
       //make a fetch request to the backend with the hotel name and room type
-      fetch(`http://localhost:5000/get-hotel-price/${hotelName}/${hotelRoom}/${arrivalDate}/${departureDate}`)
+      fetch(`http://localhost:5000/get-hotel-price/${encodedHotelName}/${encodedHotelRoom}/${encodedArrivalDate}/${encodedDepartureDate}`)
         .then(response => response.json())
         .then(data => {
           // handle the response data here
@@ -51,6 +60,10 @@ function App() {
             } else if (provider === 'hotels.com') {
               setHotelsComHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
               setHotelsComHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
+              setIsLoading(false);
+            } else if (provider === 'expedia') {
+              setExpediaHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
+              setExpediaHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
               setIsLoading(false);
             }
           });
@@ -169,9 +182,32 @@ function App() {
               )}
             </a>
             <a className="provider-card-wrapper">
-              <div className="provider-card">
-                {/* {hotelRoom} */}
-              </div>
+              {/* show the result of the gethotelprice function*/}
+              {isLoading ? (
+                <div className="provider-card">
+                  <div className="spinner-container" role="status">
+                    <ThreeDots
+                      color="#282c34"
+                      width="60"
+                    />
+                  </div>
+                </div>
+              ) : (
+                <a className="provider-card" href={expediaRecievedUrl} target="_blank">
+                  <div className="provider-logo-container">
+                    <img className="provider-image" src={expediaLogo} alt="hotels.com logo" />
+                  </div>
+                  <div className="provider-name">
+                    <text> Expedia </text>
+                  </div>
+                  <div className="provider-price">
+                    <text> {expediaRecievedPrice} </text>
+                  </div>
+                  <div className="pointer-arrow-container">
+                    <img className="pointer-arrow" src={pointer} />
+                  </div>
+                </a>
+              )}
             </a>
             <div className="provider-card-wrapper">
               <a className="provider-card">

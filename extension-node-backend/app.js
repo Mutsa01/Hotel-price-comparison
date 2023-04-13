@@ -5,6 +5,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const { getTripPrice } = require('./scrapers/tripScraper');
 const { getHotelsPrice } = require('./scrapers/hotelsScraper');
+const { getExpediaPrice } = require('./scrapers/expediaScraper');
 
 // Enable CORS and bodyParser middleware
 app.use(cors());
@@ -36,6 +37,10 @@ app.get('/get-hotel-price/:hotelName/:hotelRoom/:arrivalDate/:departureDate', as
     {
       name: 'hotels.com',
       getPrice: () => getPriceWithRetry(() => getHotelsPrice(hotelName, hotelRoom, arrivalDate, departureDate))
+    },
+    {
+      name: 'expedia',
+      getPrice: () => getPriceWithRetry(() => getExpediaPrice(hotelName, hotelRoom, arrivalDate, departureDate))
     }
   ]
 
@@ -68,6 +73,9 @@ async function getPriceWithRetry(getPriceFunction, maxRetries = 3) {
       retries++;
       console.log(`Error occurred, retrying (${retries}/${maxRetries})...`);
       await new Promise(resolve => setTimeout(resolve, 1000)); // wait for 1 second before retrying
+      if (retries === maxRetries) {
+        return  {price: 'Unavailable', hotelUrl: 'Unavailable'} ;
+      }
     }
   }
   throw new Error(`Failed to get price after ${maxRetries} retries`);
