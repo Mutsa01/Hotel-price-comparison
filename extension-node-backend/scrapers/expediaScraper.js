@@ -60,7 +60,7 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
     await page.click('[data-testid="submit-button"]');
 
     //click the first hotel of class uitk-link uitk-link-align-right uitk-link-layout-default uitk-link-medium
-    await page.waitForSelector('.uitk-link.uitk-link-align-right.uitk-link-layout-default.uitk-link-medium', { timeout: 5000 });
+    await page.waitForSelector('.uitk-link.uitk-link-align-right.uitk-link-layout-default.uitk-link-medium', { timeout: 15000 });
     await page.click('.uitk-link.uitk-link-align-right.uitk-link-layout-default.uitk-link-medium');
     // await new Promise(resolve => setTimeout(resolve, 4000));
 
@@ -74,7 +74,21 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
 
     await new Promise(resolve => setTimeout(resolve, 400));
     newPage.evaluate(() => { window.scrollTo(0, window.innerHeight) });
-    
+
+    //wait for the class room-name to be loaded, retrying a few times if necessary
+    let retries = 3;
+    while (retries > 0) {
+        try {
+            await newPage.waitForSelector('.uitk-heading.uitk-heading-6', { timeout: 5000 });
+            break;
+        } catch (error) {
+            retries--;
+            await newPage.reload();
+            console.log(`Error: ${error.message}. Retrying...`);
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    }
+
     const roomData = await newPage.evaluate(() => {
 
         const rooms = [];
