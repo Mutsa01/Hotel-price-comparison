@@ -218,6 +218,10 @@
   color: #ff8989d7;
 }
 
+.provider-price.smaller{
+  font-size: 0.7rem;
+}
+
 .provider-name {
   font-family: 'Martian Mono', monospace;
   font-size: 0.5rem;

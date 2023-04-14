@@ -14,11 +14,14 @@ function delay(time) {
     });
 }
 // This function will return the price of the first result on trip.com for the given hotel name
-async function getTripPrice(hotelName, roomType) {
-    const browser = await puppeteer.launch({ headless: true, defaultViewport: { width: 1700, height: 800 }, args: ['--start-maximized'], executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
+async function getTripPrice(hotelName, roomType, checkInDate, checkOutDate) {
+    const browser = await puppeteer.launch({ headless: false, defaultViewport: { width: 1700, height: 800 }, args: ['--start-maximized'], executablePath: 'C:/Program Files/Google/Chrome/Application/chrome.exe' });
     const page = await browser.newPage();
 
     let price = null;
+
+    const checkIn = formatDate(checkInDate);
+    const checkOut = formatDate(checkOutDate);
 
     // Go to the trip.com website and search for the given hotel
     await page.goto('https://uk.trip.com/?locale=en-gb');
@@ -34,6 +37,68 @@ async function getTripPrice(hotelName, roomType) {
     //select the suggested hotel by clicking on the class associative-item hover- this is the hotel first suggestion
     await page.waitForSelector('.associative-item.hover', { timeout: 10000 });
     await page.click('.associative-item.hover');
+
+    await new Promise(resolve => setTimeout(resolve, 400));
+
+    //click on the check in date
+    await page.evaluate((checkIn) => {
+        console.log(checkIn);
+        calMonths = document.querySelectorAll('.c-calendar-month');
+        // check both calanders for the check in date
+        for (let i = 0; i < calMonths.length; i++) {
+            const month = calMonths[i].querySelector('.c-calendar-month__title').innerText.trim();
+            if (month == checkIn[1]) {
+                console.log(month, checkIn[1]);
+                const days = calMonths[i].querySelectorAll('.is-allow-hover');
+                console.log(days);
+                // Iterate over the array and click on the element with the correct day
+                for (let i = 0; i < days.length; i++) {
+                    // Get text from the element days[i]
+                    const day = days[i].innerText.trim();
+                    console.log(day);
+                    if (day === checkIn[0]) {
+                        days[i].click()
+                        checkinSelected = true;
+                        break;
+                    }
+                }
+            }
+            console.log(month);
+        }
+        return;
+    }, checkIn);
+
+    await new Promise(resolve => setTimeout(resolve, 400));
+
+    // click on the check out date
+    await page.evaluate((checkOut) => {
+        console.log(checkOut);
+        calMonths = document.querySelectorAll('.c-calendar-month');
+        // check both calanders for the check out date
+        for (let i = 0; i < calMonths.length; i++) {
+            const month = calMonths[i].querySelector('.c-calendar-month__title').innerText.trim();
+            if (month == checkOut[1]) {
+                console.log(month, checkOut[1]);
+                const days = calMonths[i].querySelectorAll('.is-allow-hover');
+                console.log(days);
+                // Iterate over the array and click on the element with the correct day
+                for (let i = 0; i < days.length; i++) {
+                    // Get text from the element days[i]
+                    const day = days[i].innerText.trim();
+                    console.log(day);
+                    if (day === checkOut[0]) {
+                        days[i].click()
+                        checkoutSelected = true;
+                        break;
+                    }
+                }
+            }
+            console.log(month);
+        }
+        return;
+    }, checkOut);
+
+    await new Promise(resolve => setTimeout(resolve, 400));
 
     //submit search by clicking on the class associative-item hover
     await page.waitForSelector('.search-btn-wrap', { timeout: 5000 });
@@ -106,6 +171,14 @@ async function getTripPrice(hotelName, roomType) {
     await browser.close();
     // console.log(hotelUrl);
     return { price, hotelUrl };
+}
+
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    const day = date.getDate();
+    const month = new Intl.DateTimeFormat('en', { month: 'short' }).format(date);
+    const year = date.getFullYear();
+    return [`${day}`, `${month} ${year}`];
 }
 
 module.exports = { getTripPrice }
