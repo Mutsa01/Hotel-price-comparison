@@ -32,7 +32,7 @@ app.get('/get-hotel-price/:hotelName/:hotelRoom/:arrivalDate/:departureDate', as
     {
       name: 'trip.com',
       // retry 3 times if an error occurs
-      getPrice: () => getPriceWithRetry(() => getTripPrice(hotelName, hotelRoom))
+      getPrice: () => getPriceWithRetry(() => getTripPrice(hotelName, hotelRoom, arrivalDate, departureDate))
     },
     {
       name: 'hotels.com',
