@@ -144,7 +144,8 @@ function App() {
                   <div className="provider-name">
                     <text> Trip.com </text>
                   </div>
-                  <div className="provider-price">
+                  {/* if string over certain length reduce size of text */}
+                  <div className={`provider-price ${tripRecievedPrice.length > 5 ? 'smaller' : ''}`}>
                     <text> {tripRecievedPrice} </text>
                   </div>
                   <div className="pointer-arrow-container">
