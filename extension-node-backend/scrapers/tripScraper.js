@@ -40,78 +40,111 @@ async function getTripPrice(hotelName, roomType, checkInDate, checkOutDate) {
 
     await new Promise(resolve => setTimeout(resolve, 400));
 
-    //click on the check in date
-    await page.evaluate((checkIn) => {
+    // submit search by clicking on the class associative-item hover
+    await page.waitForSelector('.search-btn-wrap', { timeout: 5000 });
+    await page.click('.search-btn-wrap');
+
+    await new Promise(resolve => setTimeout(resolve, 1400));
+    //click on the button to check availability
+    await page.waitForSelector('.btn-bottom', { timeout: 18000 });
+    await page.click('.btn-bottom');
+
+    //open navigate to the new tab created
+    let newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));
+    // await page.click('.btn-bottom');
+    let newPage = await newPagePromise;
+
+    await new Promise(resolve => setTimeout(resolve, 4000));
+
+    let calRetries = 3;
+    while (calRetries > 0) {
+        try {
+            await newPage.waitForSelector('.time-tab', { timeout: 15000 });
+            await newPage.click('.time-tab')
+            break;
+        } catch (error) {
+            calRetries--;
+            console.log(`Error: ${error.message}. Retrying calander...`);
+            await page.waitForSelector('.btn-bottom', { timeout: 18000 });
+            await page.click('.btn-bottom');
+
+            //open navigate to the new tab created
+            newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));
+            // await page.click('.btn-bottom');
+            newPage = await newPagePromise;
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    }
+
+    //if the selector could not be found after multiple retries, throw an error
+    if (calRetries === 0) {
+        // throw error
+        await browser.close();
+        throw new Error('error while scraping trip.com');
+    }
+
+
+    await newPage.evaluate((checkIn) => {
         console.log(checkIn);
         calMonths = document.querySelectorAll('.c-calendar-month');
         // check both calanders for the check in date
         for (let i = 0; i < calMonths.length; i++) {
-            const month = calMonths[i].querySelector('.c-calendar-month__title').innerText.trim();
-            if (month == checkIn[1]) {
-                console.log(month, checkIn[1]);
-                const days = calMonths[i].querySelectorAll('.is-allow-hover');
-                console.log(days);
-                // Iterate over the array and click on the element with the correct day
-                for (let i = 0; i < days.length; i++) {
-                    // Get text from the element days[i]
-                    const day = days[i].innerText.trim();
-                    console.log(day);
-                    if (day === checkIn[0]) {
-                        days[i].click()
-                        checkinSelected = true;
-                        break;
-                    }
-                }
+          const month = calMonths[i].querySelector('.c-calendar-month__title').innerText.trim();
+          if (month == checkIn[1]) {
+            console.log(month, checkIn[1]);
+            const days = calMonths[i].querySelectorAll('.is-allow-hover');
+            console.log(days);
+            // Iterate over the array and click on the element with the correct day
+            for (let i = 0; i < days.length; i++) {
+              // Get text from the element days[i]
+              const day = days[i].innerText.trim();
+              console.log(day);
+              if (day === checkIn[0]) {
+                days[i].click()
+                checkinSelected = true;
+                break;
+              }
             }
-            console.log(month);
+          }
+          console.log(month);
         }
         return;
-    }, checkIn);
-
-    await new Promise(resolve => setTimeout(resolve, 400));
-
-    // click on the check out date
-    await page.evaluate((checkOut) => {
+      }, checkIn);
+    
+      await newPage.evaluate((checkOut) => {
         console.log(checkOut);
         calMonths = document.querySelectorAll('.c-calendar-month');
         // check both calanders for the check out date
         for (let i = 0; i < calMonths.length; i++) {
-            const month = calMonths[i].querySelector('.c-calendar-month__title').innerText.trim();
-            if (month == checkOut[1]) {
-                console.log(month, checkOut[1]);
-                const days = calMonths[i].querySelectorAll('.is-allow-hover');
-                console.log(days);
-                // Iterate over the array and click on the element with the correct day
-                for (let i = 0; i < days.length; i++) {
-                    // Get text from the element days[i]
-                    const day = days[i].innerText.trim();
-                    console.log(day);
-                    if (day === checkOut[0]) {
-                        days[i].click()
-                        checkoutSelected = true;
-                        break;
-                    }
-                }
+          const month = calMonths[i].querySelector('.c-calendar-month__title').innerText.trim();
+          if (month == checkOut[1]) {
+            console.log(month, checkOut[1]);
+            const days = calMonths[i].querySelectorAll('.is-allow-hover');
+            console.log(days);
+            // Iterate over the array and click on the element with the correct day
+            for (let i = 0; i < days.length; i++) {
+              // Get text from the element days[i]
+              const day = days[i].innerText.trim();
+              console.log(day);
+              if (day === checkOut[0]) {
+                days[i].click()
+                checkoutSelected = true;
+                break;
+              }
             }
-            console.log(month);
+          }
+          console.log(month);
         }
         return;
-    }, checkOut);
+      }, checkOut);
 
-    await new Promise(resolve => setTimeout(resolve, 400));
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
-    //submit search by clicking on the class associative-item hover
-    await page.waitForSelector('.search-btn-wrap', { timeout: 5000 });
-    await page.click('.search-btn-wrap');
+    // submit search by clicking on the class associative-item hover
+    await newPage.waitForSelector('.search-btn-wrap', { timeout: 5000 });
+    await newPage.click('.search-btn-wrap');
 
-    //click on the button to check availability
-    await page.waitForSelector('.btn-bottom', { timeout: 8000 });
-    await page.click('.btn-bottom');
-
-    //open navigate to the new tab created
-    const newPagePromise = new Promise(x => browser.once('targetcreated', target => x(target.page())));
-    await page.click('.btn-bottom');
-    const newPage = await newPagePromise;
+    await new Promise(resolve => setTimeout(resolve, 1000));
 
     //wait for the class room-name to be loaded, retrying a few times if necessary
     let retries = 3;
@@ -122,7 +155,7 @@ async function getTripPrice(hotelName, roomType, checkInDate, checkOutDate) {
         } catch (error) {
             retries--;
             console.log(`Error: ${error.message}. Retrying...`);
-            // await newPage.goto(newPage.url(), { waitUntil: 'load' });
+
             await new Promise(resolve => setTimeout(resolve, 1000));
         }
     }

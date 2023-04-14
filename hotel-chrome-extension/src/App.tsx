@@ -173,7 +173,7 @@ function App() {
                   <div className="provider-name">
                     <text> Hotels.com </text>
                   </div>
-                  <div className="provider-price">
+                  <div className={`provider-price ${hotelsComRecievedPrice.length > 5 ? 'smaller' : ''}`}>
                     <text> {hotelsComRecievedPrice} </text>
                   </div>
                   <div className="pointer-arrow-container">
@@ -201,7 +201,7 @@ function App() {
                   <div className="provider-name">
                     <text> Expedia </text>
                   </div>
-                  <div className="provider-price">
+                  <div className={`provider-price ${expediaRecievedPrice.length > 5 ? 'smaller' : ''}`}>
                     <text> {expediaRecievedPrice} </text>
                   </div>
                   <div className="pointer-arrow-container">
