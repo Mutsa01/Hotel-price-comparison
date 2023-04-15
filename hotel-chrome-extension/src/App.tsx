@@ -19,8 +19,6 @@ function App() {
   };
 
   // react useState hook to store data from DOM
-  const [title, setTitle] = React.useState('');
-  const [headlines, setHeadlines] = React.useState<string[]>([]);
   const [hotelName, setHotelName] = React.useState('');
   const [hotelPrice, setHotelPrice] = React.useState('');
   const [hotelRoom, setHotelRoom] = React.useState('');
@@ -96,8 +94,7 @@ function App() {
         tabs[0].id || 0,
         { type: 'GET_DOM' } as DOMMessage,
         (response: DOMMessageResponse) => {
-          setTitle(response.title);
-          setHeadlines(response.headlines);
+          // handle response from content script
           setHotelName(response.hotelName);
           setHotelPrice(response.hotelPrice);
           setHotelRoom(response.hotelRoom);
