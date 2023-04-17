@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const { getTripPrice } = require('./scrapers/tripScraper');
 const { getHotelsPrice } = require('./scrapers/hotelsScraper');
 const { getExpediaPrice } = require('./scrapers/expediaScraper');
+const { getAgodaPrice } = require('./scrapers/agodaScraper');
 
 // Enable CORS and bodyParser middleware
 app.use(cors());
@@ -41,6 +42,10 @@ app.get('/get-hotel-price/:hotelName/:hotelRoom/:arrivalDate/:departureDate', as
     {
       name: 'expedia',
       getPrice: () => getPriceWithRetry(() => getExpediaPrice(hotelName, hotelRoom, arrivalDate, departureDate))
+    },
+    {
+      name: 'agoda',
+      getPrice: () => getPriceWithRetry(() => getAgodaPrice(hotelName, hotelRoom, arrivalDate, departureDate))
     }
   ]
 

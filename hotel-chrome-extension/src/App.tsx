@@ -7,6 +7,7 @@ import plus from './icons/plus_grey.svg';
 import tripLogo from './providerLogos/trip-com-logo.jpeg';
 import hotelsComLogo from './providerLogos/hotels-com-logo.jpg';
 import expediaLogo from './providerLogos/expedia-logo.png';
+import agodaLogo from './providerLogos/agoda-logo.jpg';
 import pointer from './icons/pointer-arrow.svg';
 import './App.css';
 import { DOMMessage, DOMMessageResponse } from './types';
@@ -30,6 +31,8 @@ function App() {
   const [hotelsComRecievedUrl, setHotelsComHotelUrl] = React.useState('');
   const [expediaRecievedPrice, setExpediaHotelPrice] = React.useState('');
   const [expediaRecievedUrl, setExpediaHotelUrl] = React.useState('');
+  const [agodaRecievedPrice, setAgodaHotelPrice] = React.useState('');
+  const [agodaRecievedUrl, setAgodaHotelUrl] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(true);
 
   //pass hotelName to trip_scraper.js function and get hotel price
@@ -62,6 +65,10 @@ function App() {
             } else if (provider === 'expedia') {
               setExpediaHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
               setExpediaHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
+              setIsLoading(false);
+            } else if (provider === 'agoda') {
+              setAgodaHotelPrice(JSON.stringify(price).replace(/['"]+/g, ''));
+              setAgodaHotelUrl(JSON.stringify(hotelUrl).replace(/['"]+/g, ''));
               setIsLoading(false);
             }
           });
@@ -208,24 +215,39 @@ function App() {
               )}
             </a>
             <div className="provider-card-wrapper">
-              <a className="provider-card">
-                <div className="provider-logo-container">
+              {/* show the result of the gethotelprice function*/}
+              {isLoading ? (
+                <div className="provider-card">
+                  <div className="spinner-container" role="status">
+                    <ThreeDots
+                      color="#282c34"
+                      width="60"
+                    />
+                  </div>
                 </div>
-                <div className="provider-name">
-                  <text> {hotelRoom}, {arrivalDate} </text>
-                </div>
-                <div className="provider-price">
-                </div>
-                <div className="pointer-arrow-container">
-                </div>
-              </a>
+              ) : (
+                <a className="provider-card" href={agodaRecievedUrl} target='_blank'>
+                  <div className="provider-logo-container">
+                    <img className="provider-image" src={agodaLogo} alt="agoda logo" />
+                  </div>
+                  <div className="provider-name">
+                    <text> Agoda </text>
+                  </div>
+                  <div className={`provider-price ${agodaRecievedPrice.length > 5 ? 'smaller' : ''}`}>
+                    <text> {agodaRecievedPrice} </text>
+                  </div>
+                  <div className="pointer-arrow-container">
+                    <img className='pointer-arrow' src={pointer} />
+                  </div>
+                </a>
+              )}
             </div>
             <a className="provider-card-wrapper">
               <a className="provider-card">
                 <div className="provider-logo-container">
                 </div>
                 <div className="provider-name">
-                  <text> {departureDate} </text>
+                  <text> {departureDate}, {hotelRoom} </text>
                 </div>
                 <div className="provider-price">
                 </div>

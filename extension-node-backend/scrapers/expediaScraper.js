@@ -89,6 +89,8 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
         }
     }
 
+    await new Promise(resolve => setTimeout(resolve, 2000));
+
     const roomData = await newPage.evaluate(() => {
 
         const rooms = [];
