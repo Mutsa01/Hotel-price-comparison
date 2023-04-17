@@ -79,7 +79,7 @@ async function getExpediaPrice(hotelName, roomType, checkInDate, checkOutDate) {
     let retries = 3;
     while (retries > 0) {
         try {
-            await newPage.waitForSelector('.uitk-heading.uitk-heading-6', { timeout: 5000 });
+            await newPage.waitForSelector('.uitk-heading.uitk-heading-6', { timeout: 15000 });
             break;
         } catch (error) {
             retries--;

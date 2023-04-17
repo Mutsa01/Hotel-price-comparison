@@ -212,6 +212,7 @@ function App() {
                 <div className="provider-logo-container">
                 </div>
                 <div className="provider-name">
+                  <text> {hotelRoom}, {arrivalDate} </text>
                 </div>
                 <div className="provider-price">
                 </div>
@@ -220,8 +221,17 @@ function App() {
               </a>
             </div>
             <a className="provider-card-wrapper">
-              <div className="provider-card">
-              </div>
+              <a className="provider-card">
+                <div className="provider-logo-container">
+                </div>
+                <div className="provider-name">
+                  <text> {departureDate} </text>
+                </div>
+                <div className="provider-price">
+                </div>
+                <div className="pointer-arrow-container">
+                </div>
+              </a>
             </a>
           </div>
           <div className="bottom-nav-container">

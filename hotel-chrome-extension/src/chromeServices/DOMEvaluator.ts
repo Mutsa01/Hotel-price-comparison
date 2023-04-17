@@ -6,7 +6,7 @@ const messagesFromReactAppListener = (msg: DOMMessage, sender: chrome.runtime.Me
   // Check the current URL to determine which site we are on
   const currentUrl = window.location.href;
 
-  if (window.location.href.includes('marriott.com')) {
+  if (window.location.href.includes('marriott')) {
     // Selector queries for Marriott website
     const tripDates = document.querySelectorAll(".m-date-text") as NodeListOf<HTMLElement>;
 
@@ -30,14 +30,52 @@ const messagesFromReactAppListener = (msg: DOMMessage, sender: chrome.runtime.Me
     console.log('[content.js]. Message response', response);
 
     sendResponse(response)
-  } else if (currentUrl.includes('booking.com')) {
+  } else if (window.location.href.includes('ihg')) {
+    console.log('ihg.com');
 
-    console.log('booking.com');
-  };
+    // Selector queries for IHG website
+    const tripDates = (document.querySelector('[data-testid="dates-info"]') as HTMLElement).innerText;
+    const [checkInDate, checkOutDate] = formatDate(tripDates);
 
-  // console.log('[content.js]. Message response', response);
+    const response: DOMMessageResponse = {
+      //get hotelname from element with class brand-name
+      hotelName: (document.querySelector(".brand-name") as HTMLElement).innerText.trim(),
+      // hotelName: 'test name',
 
-  // sendResponse(response)
+      hotelPrice: (document.querySelector('[data-testid="total-price"]') as HTMLElement).innerText.trim(),
+      // hotelPrice: 'test price',
+
+      hotelRoom: (document.querySelector('[data-testid="room-type-info"]') as HTMLElement).innerText.trim(),
+      // hotelRoom: 'test room',
+
+      arrivalDate: checkInDate.trim(),
+
+      departureDate: checkOutDate.trim()
+
+
+    };
+
+    console.log('[content.js]. Message response', response);
+
+    sendResponse(response)
+  }
+};
+
+function formatDate(dateStr: string) {
+    // Split the date string into its components
+    const [month, dateRange, year] = dateStr.split(" ");
+    const [startDate, endDate] = dateRange.split("-");
+  
+    // Parse the start and end dates
+    const startDateObj = new Date(`${month} ${startDate}, ${year}`);
+    const endDateObj = new Date(`${month} ${endDate}, ${year}`);
+  
+    // Format the start and end dates as strings
+    const startDateFormatted = startDateObj.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+    const endDateFormatted = endDateObj.toLocaleDateString("en-US", { weekday: "long", month: "long", day: "numeric", year: "numeric" });
+  
+    // Return the formatted dates as an array
+    return [startDateFormatted, endDateFormatted];
 }
 
 
