@@ -19,8 +19,6 @@ function App() {
   };
 
   // react useState hook to store data from DOM
-  const [title, setTitle] = React.useState('');
-  const [headlines, setHeadlines] = React.useState<string[]>([]);
   const [hotelName, setHotelName] = React.useState('');
   const [hotelPrice, setHotelPrice] = React.useState('');
   const [hotelRoom, setHotelRoom] = React.useState('');
@@ -96,8 +94,7 @@ function App() {
         tabs[0].id || 0,
         { type: 'GET_DOM' } as DOMMessage,
         (response: DOMMessageResponse) => {
-          setTitle(response.title);
-          setHeadlines(response.headlines);
+          // handle response from content script
           setHotelName(response.hotelName);
           setHotelPrice(response.hotelPrice);
           setHotelRoom(response.hotelRoom);
@@ -215,6 +212,7 @@ function App() {
                 <div className="provider-logo-container">
                 </div>
                 <div className="provider-name">
+                  <text> {hotelRoom}, {arrivalDate} </text>
                 </div>
                 <div className="provider-price">
                 </div>
@@ -223,8 +221,17 @@ function App() {
               </a>
             </div>
             <a className="provider-card-wrapper">
-              <div className="provider-card">
-              </div>
+              <a className="provider-card">
+                <div className="provider-logo-container">
+                </div>
+                <div className="provider-name">
+                  <text> {departureDate} </text>
+                </div>
+                <div className="provider-price">
+                </div>
+                <div className="pointer-arrow-container">
+                </div>
+              </a>
             </a>
           </div>
           <div className="bottom-nav-container">

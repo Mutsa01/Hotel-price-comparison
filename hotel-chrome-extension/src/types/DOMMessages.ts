@@ -3,8 +3,6 @@ export type DOMMessage = {
   }
   
   export type DOMMessageResponse = {
-    title: string;
-    headlines: string[];
     hotelName: string;
     hotelRoom: string;
     hotelPrice: string; 
