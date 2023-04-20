@@ -88,6 +88,18 @@ function App() {
               setIsLoading(false);
             }
           });
+          // write the searche details to chrome storage
+          const searchDetails = {
+            hotel_name: hotelName,
+            hotel_room: hotelRoom,
+            arrival_date: arrivalDate,
+            departure_date: departureDate,
+          };
+
+          chrome.storage.local.set({ searchDetails }, () => {
+            console.log('Search details saved');
+          });
+
         })
         .catch(error => {
           // handle any errors here

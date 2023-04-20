@@ -15,78 +15,97 @@ import Extras from "./extras";
 
 function Recent() {
 
-  const [showHome, setShowHome] = React.useState(false);
-  const [showExtras, setShowExtras] = React.useState(false);
+    const [showHome, setShowHome] = React.useState(false);
+    const [showExtras, setShowExtras] = React.useState(false);
 
 
-  const handleHomeClick = () => {
-    setShowHome(!showHome);
-  };
+    const handleHomeClick = () => {
+        setShowHome(!showHome);
+    };
 
-  const handlePlusClick = () => {
-    setShowExtras(!showExtras);
-  };
+    const handlePlusClick = () => {
+        setShowExtras(!showExtras);
+    };
 
-  return (
-    <div>
-      {showHome ? (
-        <App />
-        ) : showExtras ? (
-            <Extras />
-          ) : (
-        <>
-          <body>
-            <div className="content-container">
-              <div className="providers-list">
-                <a className="options-card-wrapper">
-                  <a className="options-card">
-                    <div className="provider-logo-container">
-                    </div>
-                    <div className="option-text">
-                      <text> Helpcfs </text>
-                    </div>
-                    <div className="pointer-arrow-container">
-                      <img className="pointer-arrow" src={pointer} />
-                    </div>
-                  </a>
-                </a>
-                <a className="options-card-wrapper">
-                  <a className="options-card">
-                    <div className="provider-logo-container">
-                    </div>
-                    <div className="option-text">
-                      <text> Providers</text>
-                    </div>
-                    <div className="pointer-arrow-container">
-                      <img className="pointer-arrow" src={pointer} />
-                    </div>
-                  </a>
-                </a>
-                <a className="options-card-wrapper">
-                  <a className="options-card">
-                    <div className="provider-logo-container">
-                    </div>
-                    <div className="option-text">
-                      <text> About</text>
-                    </div>
-                    <div className="pointer-arrow-container">
-                      <img className="pointer-arrow" src={pointer} />
-                    </div>
-                  </a>
-                </a>
-              </div>
-              <div className="bottom-nav-container">
-                <img src={yellowSearch} className="bottom-nav-item" alt="search icon" />
-                <img src={greyHouse} className="bottom-nav-item" alt="home icon" onClick={handleHomeClick} />
-                <img src={greyPlus} className="bottom-nav-item" alt="plus icon" onClick = {handlePlusClick} />
-              </div>
-            </div>
-          </body>
-        </>
-      )}
-      {showHome}
-    </div>
-  );
+
+    // Retrieve data from the storage
+    chrome.storage.local.get(null, function (items) {
+        const itemsArray = Object.entries(items);
+        const lastFiveItems = itemsArray.slice(-5);
+
+        lastFiveItems.forEach(([key, value]) => {
+            console.log(`Key: ${key}`);
+            console.log(`Hotel Name: ${value.hotel_name}`);
+            console.log(`Hotel Room: ${value.hotel_room}`);
+            console.log(`Arrival Date: ${value.arrival_date}`);
+            console.log(`Departure Date: ${value.departure_date}`);
+        });
+        
+        
+    });
+
+
+
+    return (
+        <div>
+            {showHome ? (
+                <App />
+            ) : showExtras ? (
+                <Extras />
+            ) : (
+                <>
+                    <body>
+                        <div className="content-container">
+                            <div className="providers-list">
+                                <a className="options-card-wrapper">
+                                    <a className="options-card">
+                                        <div className="provider-logo-container">
+                                        </div>
+                                        <div className="option-text">
+                                            <text> Helpcfs </text>
+                                        </div>
+                                        <div className="pointer-arrow-container">
+                                            <img className="pointer-arrow" src={pointer} />
+                                        </div>
+                                    </a>
+                                </a>
+                                <a className="options-card-wrapper">
+                                    <a className="options-card">
+                                        <div className="provider-logo-container">
+                                        </div>
+                                        <div className="option-text">
+                                            <text> Providers</text>
+                                        </div>
+                                        <div className="pointer-arrow-container">
+                                            <img className="pointer-arrow" src={pointer} />
+                                        </div>
+                                    </a>
+                                </a>
+                                <a className="options-card-wrapper">
+                                    <a className="options-card">
+                                        <div className="provider-logo-container">
+                                        </div>
+                                        <div className="option-text">
+                                            <text> About</text>
+                                        </div>
+                                        <div className="pointer-arrow-container">
+                                            <img className="pointer-arrow" src={pointer} />
+                                        </div>
+                                    </a>
+                                </a>
+                            </div>
+                            <div className="bottom-nav-container">
+                                <img src={yellowSearch} className="bottom-nav-item" alt="search icon" />
+                                <img src={greyHouse} className="bottom-nav-item" alt="home icon" onClick={handleHomeClick} />
+                                <img src={greyPlus} className="bottom-nav-item" alt="plus icon" onClick={handlePlusClick} />
+                            </div>
+                        </div>
+                    </body>
+                </>
+            )}
+            {showHome}
+        </div>
+    );
 }
 
 export default Recent;
