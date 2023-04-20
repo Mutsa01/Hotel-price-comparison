@@ -234,6 +234,13 @@ header{
   color: #282c34;
 }
 
+h3{
+  font-family: 'Martian Mono', monospace;
+  font-size: 0.5rem;
+  color: #282c34;
+  font-weight: bold;
+}
+
 
 
 

@@ -16,6 +16,7 @@ import { ThreeDots } from 'react-loader-spinner'
 import { Link } from "react-router-dom";
 
 import Extras from './extras';
+import Recent from './recents';
 
 function App() {
   const handleExitClick = () => {
@@ -23,10 +24,15 @@ function App() {
   };
 
   const [showExtras, setShowExtras] = React.useState(false);
+  const [showRecents, setShowRecents] = React.useState(false);
 
 
   const handlePlusClick = () => {
     setShowExtras(!showExtras);
+  };
+
+  const handleRecentsClick = () => {
+    setShowRecents(!showRecents);
   };
 
   // react useState hook to store data from DOM
@@ -138,11 +144,15 @@ function App() {
       </header>
       {showExtras ? (
         <Extras />
+      ) : showRecents ? (
+        <Recent />
       ) : (
         <>
           <body>
             <div className="content-container">
+              
               <div className="providers-list">
+              {/* <h3> Searching for a {hotelRoom} from {arrivalDate} to {departureDate} </h3> */}
                 <a className="provider-card-wrapper">
                   {/* show the result of the gethotelprice function*/}
                   {isLoading ? (
@@ -271,7 +281,7 @@ function App() {
                 </a>
               </div>
               <div className="bottom-nav-container">
-                <img src={search} className="bottom-nav-item" alt="search icon" />
+                <img src={search} className="bottom-nav-item" alt="search icon" onClick = {handleRecentsClick}/>
                 <img src={house} className="bottom-nav-item" alt="home icon" />
                 {/* <Link to="/static/js/App.tsx"> */}
                 <img src={plus} className="bottom-nav-item" alt="plus icon" onClick={handlePlusClick} />
@@ -288,7 +298,6 @@ function App() {
           </body>
         </>
       )}
-      {showExtras}
     </div>
   );
 }

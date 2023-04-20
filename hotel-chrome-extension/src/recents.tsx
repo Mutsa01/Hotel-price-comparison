@@ -4,36 +4,36 @@ import "./cssFiles/index.css";
 import "./cssFiles/extras.css";
 import logo from './new_logo.svg';
 import exit from './grey_exit_icon.svg';
-import search from './icons/search_icon.svg';
+import yellowSearch from './icons/search_icon_yellow.svg';
 import greyHouse from './icons/house_icon_grey.svg';
 import pointer from './icons/pointer-arrow.svg';
 import { Link } from "react-router-dom";
-import plusYellow from "./icons/plus_yellow.svg";
+import greyPlus from "./icons/plus_grey.svg";
 
 import App from "./App";
-import Recent from "./recents";
+import Extras from "./extras";
 
-function Extras() {
+function Recent() {
 
   const [showHome, setShowHome] = React.useState(false);
-  const [showRecents, setShowRecents] = React.useState(false);
+  const [showExtras, setShowExtras] = React.useState(false);
 
 
   const handleHomeClick = () => {
     setShowHome(!showHome);
   };
 
-  const handleRecentsClick = () => {
-    setShowRecents(!showRecents);
+  const handlePlusClick = () => {
+    setShowExtras(!showExtras);
   };
 
   return (
     <div>
       {showHome ? (
         <App />
-      ) : showRecents ? (
-        <Recent />
-      ) : (
+        ) : showExtras ? (
+            <Extras />
+          ) : (
         <>
           <body>
             <div className="content-container">
@@ -43,7 +43,7 @@ function Extras() {
                     <div className="provider-logo-container">
                     </div>
                     <div className="option-text">
-                      <text> Help </text>
+                      <text> Helpcfs </text>
                     </div>
                     <div className="pointer-arrow-container">
                       <img className="pointer-arrow" src={pointer} />
@@ -76,16 +76,17 @@ function Extras() {
                 </a>
               </div>
               <div className="bottom-nav-container">
-                <img src={search} className="bottom-nav-item" alt="search icon" onClick={handleRecentsClick} />
+                <img src={yellowSearch} className="bottom-nav-item" alt="search icon" />
                 <img src={greyHouse} className="bottom-nav-item" alt="home icon" onClick={handleHomeClick} />
-                <img src={plusYellow} className="bottom-nav-item" alt="plus icon" />
+                <img src={greyPlus} className="bottom-nav-item" alt="plus icon" onClick = {handlePlusClick} />
               </div>
             </div>
           </body>
         </>
       )}
+      {showHome}
     </div>
   );
 }
 
-export default Extras;
+export default Recent;
