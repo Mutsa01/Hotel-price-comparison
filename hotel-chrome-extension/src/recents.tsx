@@ -2,6 +2,7 @@ import React from "react";
 import "./cssFiles/App.css";
 import "./cssFiles/index.css";
 import "./cssFiles/extras.css";
+import "./cssFiles/recents.css";
 import logo from './new_logo.svg';
 import exit from './grey_exit_icon.svg';
 import yellowSearch from './icons/search_icon_yellow.svg';
@@ -18,6 +19,9 @@ function Recent() {
     const [showHome, setShowHome] = React.useState(false);
     const [showExtras, setShowExtras] = React.useState(false);
 
+    const [recentSearches, setRecentSearches] = React.useState<{ hotelName: string; hotelRoom: string; arrivalDate: string; departureDate: string; }[]>([]);
+
+
 
     const handleHomeClick = () => {
         setShowHome(!showHome);
@@ -27,22 +31,28 @@ function Recent() {
         setShowExtras(!showExtras);
     };
 
+    // const recentSearches: { hotelName: String; hotelRoom: String; arrivalDate: String; departureDate: String; }[] = [];
 
     // Retrieve data from the storage
-    chrome.storage.local.get(null, function (items) {
-        const itemsArray = Object.entries(items);
-        const lastFiveItems = itemsArray.slice(-5);
+    React.useEffect(() => {
+        chrome.storage.local.get(null, function (items) {
+            const itemsArray = Object.entries(items);
+            const lastFiveItems = itemsArray.slice(-5);
 
-        lastFiveItems.forEach(([key, value]) => {
-            console.log(`Key: ${key}`);
-            console.log(`Hotel Name: ${value.hotel_name}`);
-            console.log(`Hotel Room: ${value.hotel_room}`);
-            console.log(`Arrival Date: ${value.arrival_date}`);
-            console.log(`Departure Date: ${value.departure_date}`);
+            const searchData: { hotelName: string; hotelRoom: string; arrivalDate: string; departureDate: string; }[] = [];
+            lastFiveItems.forEach(([key, value]) => {
+
+                searchData.push({ hotelName: value.hotel_name, hotelRoom: value.hotel_room, arrivalDate: value.arrival_date, departureDate: value.departure_date });
+
+            });
+
+            console.log(searchData);
+            console.log(searchData[4].hotelName);
+
+            setRecentSearches(searchData);
+
         });
-        
-        
-    });
+    }, []);
 
 
 
@@ -57,41 +67,59 @@ function Recent() {
                     <body>
                         <div className="content-container">
                             <div className="providers-list">
-                                <a className="options-card-wrapper">
-                                    <a className="options-card">
-                                        <div className="provider-logo-container">
+                                <a className="recents-card">
+                                    <div className="search-text-wrapper">
+                                        <div className="search-text">
+                                        {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[4].hotelName}</text>}
                                         </div>
-                                        <div className="option-text">
+                                        <div className="search-text">
+                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[4].hotelRoom}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[4].arrivalDate}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[4].departureDate}</text>}
+                                        </div>
+                                    </div>
+                                    <div className="pointer-arrow-container">
+                                        <img className="pointer-arrow" src={pointer} />
+                                    </div>
+                                </a>
+                                <a className="recents-card">
+                                    <div className="search-text-wrapper">
+                                        <div className="search-text">
                                             <text> Helpcfs </text>
                                         </div>
-                                        <div className="pointer-arrow-container">
-                                            <img className="pointer-arrow" src={pointer} />
+                                        <div className="search-text">
+                                            <text> Helpcfs </text>
                                         </div>
-                                    </a>
+                                        <div className="search-text">
+                                            <text> Helpcfs </text>
+                                        </div>
+                                    </div>
+                                    <div className="pointer-arrow-container">
+                                        <img className="pointer-arrow" src={pointer} />
+                                    </div>
                                 </a>
-                                <a className="options-card-wrapper">
-                                    <a className="options-card">
-                                        <div className="provider-logo-container">
+
+                                <a className="recents-card">
+                                    <div className="search-text-wrapper">
+                                        <div className="search-text">
+                                            <text> Helpcfs </text>
                                         </div>
-                                        <div className="option-text">
-                                            <text> Providers</text>
+                                        <div className="search-text">
+                                            <text> Helpcfs </text>
                                         </div>
-                                        <div className="pointer-arrow-container">
-                                            <img className="pointer-arrow" src={pointer} />
+                                        <div className="search-text">
+                                            <text> Helpcfs </text>
                                         </div>
-                                    </a>
-                                </a>
-                                <a className="options-card-wrapper">
-                                    <a className="options-card">
-                                        <div className="provider-logo-container">
-                                        </div>
-                                        <div className="option-text">
-                                            <text> About</text>
-                                        </div>
-                                        <div className="pointer-arrow-container">
-                                            <img className="pointer-arrow" src={pointer} />
-                                        </div>
-                                    </a>
+                                    </div>
+                                    <div className="pointer-arrow-container">
+                                        <img className="pointer-arrow" src={pointer} />
+                                    </div>
                                 </a>
                             </div>
                             <div className="bottom-nav-container">
