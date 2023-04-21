@@ -155,9 +155,12 @@ function App() {
         </div>
       </header>
       {showExtras ? (
-        <Extras />
+        <Extras 
+        />
       ) : showRecents ? (
-        <Recent />
+        <Recent 
+        getHotelPrice={getHotelPrice}
+        />
       ) : (
         <>
           <body>

@@ -32,7 +32,9 @@ function Extras() {
       {showHome ? (
         <App />
       ) : showRecents ? (
-        <Recent />
+        <Recent getHotelPrice={function (hotelName: string, hotelRoom: string, arrivalDate: string, departureDate: string): void {
+            throw new Error("Function not implemented.");
+          } } />
       ) : (
         <>
           <body>

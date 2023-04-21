@@ -11,10 +11,17 @@ import pointer from './icons/pointer-arrow.svg';
 import { Link } from "react-router-dom";
 import greyPlus from "./icons/plus_grey.svg";
 
+import getHotelPrice from "./App";
+
 import App from "./App";
 import Extras from "./extras";
 
-function Recent() {
+
+interface Props {
+    getHotelPrice: (hotelName: string, hotelRoom: string, arrivalDate: string, departureDate: string) => void;
+  }
+
+function Recent(props: Props) {
 
     const [showHome, setShowHome] = React.useState(false);
     const [showExtras, setShowExtras] = React.useState(false);
@@ -29,6 +36,14 @@ function Recent() {
 
     const handlePlusClick = () => {
         setShowExtras(!showExtras);
+    };
+
+
+
+    const initiateSearch4 = () => {
+        // open App.tsx and initiate search
+        setShowHome(!showHome);
+        props.getHotelPrice(recentSearches[4].hotelName, recentSearches[4].hotelRoom, recentSearches[4].arrivalDate, recentSearches[4].departureDate)
     };
 
     // const recentSearches: { hotelName: String; hotelRoom: String; arrivalDate: String; departureDate: String; }[] = [];
@@ -67,7 +82,7 @@ function Recent() {
                     <body>
                         <div className="content-container">
                             <div className="providers-list">
-                                <a className="recents-card">
+                                <a className="recents-card" onClick={initiateSearch4}>
                                     <div className="search-text-wrapper">
                                         <div className="search-text">
                                         {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[4].hotelName}</text>}
