@@ -38,15 +38,11 @@ function Recent(props: Props) {
         setShowExtras(!showExtras);
     };
 
-
-
     const initiateSearch4 = () => {
-        // open App.tsx and initiate search
+        // open App.tsx and initiate rate search
         setShowHome(!showHome);
         props.getHotelPrice(recentSearches[4].hotelName, recentSearches[4].hotelRoom, recentSearches[4].arrivalDate, recentSearches[4].departureDate)
     };
-
-    // const recentSearches: { hotelName: String; hotelRoom: String; arrivalDate: String; departureDate: String; }[] = [];
 
     // Retrieve data from the storage
     React.useEffect(() => {
