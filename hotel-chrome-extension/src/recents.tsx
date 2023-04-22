@@ -19,7 +19,7 @@ import Extras from "./extras";
 
 interface Props {
     getHotelPrice: (hotelName: string, hotelRoom: string, arrivalDate: string, departureDate: string) => void;
-  }
+}
 
 function Recent(props: Props) {
 
@@ -38,10 +38,10 @@ function Recent(props: Props) {
         setShowExtras(!showExtras);
     };
 
-    const initiateSearch4 = () => {
+    const initiateSearch = (i: number) => {
         // open App.tsx and initiate rate search
         setShowHome(!showHome);
-        props.getHotelPrice(recentSearches[4].hotelName, recentSearches[4].hotelRoom, recentSearches[4].arrivalDate, recentSearches[4].departureDate)
+        props.getHotelPrice(recentSearches[i].hotelName, recentSearches[i].hotelRoom, recentSearches[i].arrivalDate, recentSearches[i].departureDate)
     };
 
     // Retrieve data from the storage
@@ -78,10 +78,10 @@ function Recent(props: Props) {
                     <body>
                         <div className="content-container">
                             <div className="providers-list">
-                                <a className="recents-card" onClick={initiateSearch4}>
+                                <a className="recents-card" onClick={() => initiateSearch(4)}>
                                     <div className="search-text-wrapper">
                                         <div className="search-text">
-                                        {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[4].hotelName}</text>}
+                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[4].hotelName}</text>}
                                         </div>
                                         <div className="search-text">
                                             {recentSearches.length > 4 && <text> Room Type: {recentSearches[4].hotelRoom}</text>}
@@ -99,16 +99,21 @@ function Recent(props: Props) {
                                         <img className="pointer-arrow" src={pointer} />
                                     </div>
                                 </a>
-                                <a className="recents-card">
+                                <a className="recents-card" onClick={() => initiateSearch(3)}>
                                     <div className="search-text-wrapper">
                                         <div className="search-text">
-                                            <text> Helpcfs </text>
+                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[3].hotelName}</text>}
                                         </div>
                                         <div className="search-text">
-                                            <text> Helpcfs </text>
+                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[3].hotelRoom}</text>}
                                         </div>
                                         <div className="search-text">
-                                            <text> Helpcfs </text>
+                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[3].arrivalDate}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[3].departureDate}</text>}
                                         </div>
                                     </div>
                                     <div className="pointer-arrow-container">
@@ -116,16 +121,65 @@ function Recent(props: Props) {
                                     </div>
                                 </a>
 
-                                <a className="recents-card">
+                                <a className="recents-card" onClick={() => initiateSearch(2)}>
                                     <div className="search-text-wrapper">
                                         <div className="search-text">
-                                            <text> Helpcfs </text>
+                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[2].hotelName}</text>}
                                         </div>
                                         <div className="search-text">
-                                            <text> Helpcfs </text>
+                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[2].hotelRoom}</text>}
                                         </div>
                                         <div className="search-text">
-                                            <text> Helpcfs </text>
+                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[2].arrivalDate}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[2].departureDate}</text>}
+                                        </div>
+                                    </div>
+                                    <div className="pointer-arrow-container">
+                                        <img className="pointer-arrow" src={pointer} />
+                                    </div>
+                                </a>
+
+                                <a className="recents-card" onClick={() => initiateSearch(1)}>
+                                    <div className="search-text-wrapper">
+                                        <div className="search-text">
+                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[1].hotelName}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[1].hotelRoom}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[1].arrivalDate}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[1].departureDate}</text>}
+                                        </div>
+                                    </div>
+                                    <div className="pointer-arrow-container">
+                                        <img className="pointer-arrow" src={pointer} />
+                                    </div>
+                                </a>
+
+                                <a className="recents-card" onClick={() => initiateSearch(0)}>
+                                    <div className="search-text-wrapper">
+                                        <div className="search-text">
+                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[0].hotelName}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[0].hotelRoom}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[0].arrivalDate}</text>}
+                                        </div>
+                                        <div className="search-text">
+                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
+                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[0].departureDate}</text>}
                                         </div>
                                     </div>
                                     <div className="pointer-arrow-container">
