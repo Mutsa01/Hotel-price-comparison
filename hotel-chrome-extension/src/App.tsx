@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 
 import Extras from './extras';
 import Recent from './recents';
+import SearchError from './tryAgain';
 
 function App() {
   const handleExitClick = () => {
@@ -25,6 +26,7 @@ function App() {
 
   const [showExtras, setShowExtras] = React.useState(false);
   const [showRecents, setShowRecents] = React.useState(false);
+  const [showSearchError, setShowSearchError] = React.useState(false);
 
 
   const handlePlusClick = () => {
@@ -33,6 +35,10 @@ function App() {
 
   const handleRecentsClick = () => {
     setShowRecents(!showRecents);
+  };
+
+  const handleSearchErrorClick = () => {
+    setShowSearchError(!showSearchError);
   };
 
   // react useState hook to store data from DOM
@@ -129,16 +135,18 @@ function App() {
         tabs[0].id || 0,
         { type: 'GET_DOM' } as DOMMessage,
         (response: DOMMessageResponse) => {
-          // handle response from content script
-          setHotelName(response.hotelName);
-          setHotelPrice(response.hotelPrice);
-          setHotelRoom(response.hotelRoom);
-          setArrivalDate(response.arrivalDate);
-          setDepartureDate(response.departureDate);
-          console.log(response);
-
-          //pass hoteldetails to function which will make a fetch request to the backend
-          getHotelPrice(response.hotelName, response.hotelRoom, response.arrivalDate, response.departureDate);
+          if (response) {
+            setHotelName(response.hotelName);
+            setHotelPrice(response.hotelPrice);
+            setHotelRoom(response.hotelRoom);
+            setArrivalDate(response.arrivalDate);
+            setDepartureDate(response.departureDate);
+            console.log(response);
+            getHotelPrice(response.hotelName, response.hotelRoom, response.arrivalDate, response.departureDate);
+          } else {
+            handleSearchErrorClick();
+            console.log('Response is undefined');
+          }
         });
     });
   }, []);
@@ -155,19 +163,22 @@ function App() {
         </div>
       </header>
       {showExtras ? (
-        <Extras 
+        <Extras
         />
       ) : showRecents ? (
-        <Recent 
-        getHotelPrice={getHotelPrice}
+        <Recent
+          getHotelPrice={getHotelPrice}
+        />
+      ) : showSearchError ? (
+        < SearchError
         />
       ) : (
         <>
           <body>
             <div className="content-container">
-              
+
               <div className="providers-list">
-              {/* <h3> Searching for a {hotelRoom} from {arrivalDate} to {departureDate} </h3> */}
+                {/* <h3> Searching for a {hotelRoom} from {arrivalDate} to {departureDate} </h3> */}
                 <a className="provider-card-wrapper">
                   {/* show the result of the gethotelprice function*/}
                   {isLoading ? (
@@ -296,7 +307,7 @@ function App() {
                 </a>
               </div>
               <div className="bottom-nav-container">
-                <img src={search} className="bottom-nav-item" alt="search icon" onClick = {handleRecentsClick}/>
+                <img src={search} className="bottom-nav-item" alt="search icon" onClick={handleRecentsClick} />
                 <img src={house} className="bottom-nav-item" alt="home icon" />
                 {/* <Link to="/static/js/App.tsx"> */}
                 <img src={plus} className="bottom-nav-item" alt="plus icon" onClick={handlePlusClick} />
