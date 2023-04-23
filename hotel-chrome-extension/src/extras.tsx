@@ -2,21 +2,20 @@ import React from "react";
 import "./cssFiles/App.css";
 import "./cssFiles/index.css";
 import "./cssFiles/extras.css";
-import logo from './new_logo.svg';
-import exit from './grey_exit_icon.svg';
 import search from './icons/search_icon.svg';
 import greyHouse from './icons/house_icon_grey.svg';
 import pointer from './icons/pointer-arrow.svg';
-import { Link } from "react-router-dom";
 import plusYellow from "./icons/plus_yellow.svg";
 
 import App from "./App";
 import Recent from "./recents";
+import Providers from "./providerView";
 
 function Extras() {
 
   const [showHome, setShowHome] = React.useState(false);
   const [showRecents, setShowRecents] = React.useState(false);
+  const [showProviders, setShowProviders] = React.useState(false);
 
 
   const handleHomeClick = () => {
@@ -27,10 +26,16 @@ function Extras() {
     setShowRecents(!showRecents);
   };
 
+  const handleProvidersClick = () => {
+    setShowProviders(!showProviders);
+  };
+
   return (
     <div>
       {showHome ? (
         <App />
+      ) : showProviders ? (
+        <Providers />
       ) : showRecents ? (
         <Recent getHotelPrice={function (hotelName: string, hotelRoom: string, arrivalDate: string, departureDate: string): void {
             throw new Error("Function not implemented.");
@@ -52,7 +57,7 @@ function Extras() {
                     </div>
                   </a>
                 </a>
-                <a className="options-card-wrapper">
+                <a className="options-card-wrapper" onClick={handleProvidersClick}>
                   <a className="options-card">
                     <div className="provider-logo-container">
                     </div>
