@@ -72,7 +72,6 @@ async function getPriceWithRetry(getPriceFunction, maxRetries = 3) {
   while (retries < maxRetries) {
     try {
       const { price, hotelUrl } = await getPriceFunction();
-
       return { price, hotelUrl };
     } catch (error) {
       retries++;

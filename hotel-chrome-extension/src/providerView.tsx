@@ -35,7 +35,12 @@ function Providers() {
     return (
         <div>
             {showHome ? (
-                <App />
+                <App
+                    _hotelName={""}
+                    _hotelRoom={""}
+                    _arrivalDate={""}
+                    _departureDate={""}
+                />
             ) : showRecents ? (
                 <Recent getHotelPrice={function (hotelName: string, hotelRoom: string, arrivalDate: string, departureDate: string): void {
                     throw new Error("Function not implemented.");
@@ -55,7 +60,7 @@ function Providers() {
                                     <img src={expediaLogo} alt="hotels.com logo" />
                                 </div>
                                 <div className="ballC">
-                                    <img  src={agodaLogo} alt="agoda logo" />
+                                    <img src={agodaLogo} alt="agoda logo" />
                                 </div>
                                 <div className="ballD">
                                     <img src={ihgLogo} alt="ihg logo" />

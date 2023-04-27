@@ -33,7 +33,12 @@ function Extras() {
   return (
     <div>
       {showHome ? (
-        <App />
+        <App 
+        _hotelName={""} 
+        _hotelRoom={""} 
+        _arrivalDate={""} 
+        _departureDate={""} 
+      />
       ) : showProviders ? (
         <Providers />
       ) : showRecents ? (

@@ -13,16 +13,27 @@ import './cssFiles/App.css';
 import { DOMMessage, DOMMessageResponse } from './types';
 import { trackPromise } from 'react-promise-tracker';
 import { ThreeDots } from 'react-loader-spinner'
-import { Link } from "react-router-dom";
+import { v4 as uuidv4 } from 'uuid';
+
 
 import Extras from './extras';
 import Recent from './recents';
 import SearchError from './tryAgain';
 
-function App() {
+type AppProps = {
+  _hotelName: string;
+  _hotelRoom: string;
+  _arrivalDate: string;
+  _departureDate: string;
+};
+
+function App(props: AppProps): JSX.Element {
+  const { _hotelName, _hotelRoom, _arrivalDate, _departureDate } = props;
   const handleExitClick = () => {
     window.close();
   };
+
+  console.log(_hotelName, _hotelRoom, _arrivalDate, _departureDate);
 
   const [showExtras, setShowExtras] = React.useState(false);
   const [showRecents, setShowRecents] = React.useState(false);
@@ -94,7 +105,7 @@ function App() {
               setIsLoading(false);
             }
           });
-          // write the searche details to chrome storage
+          // write the search details to chrome storage
           const searchDetails = {
             hotel_name: hotelName,
             hotel_room: hotelRoom,
@@ -102,7 +113,9 @@ function App() {
             departure_date: departureDate,
           };
 
-          chrome.storage.local.set({ searchDetails }, () => {
+          const uniqueKey = uuidv4();
+
+          chrome.storage.local.set({ [uniqueKey]: searchDetails }, () => {
             console.log('Search details saved');
           });
 
@@ -135,14 +148,23 @@ function App() {
         tabs[0].id || 0,
         { type: 'GET_DOM' } as DOMMessage,
         (response: DOMMessageResponse) => {
-          if (response) {
-            setHotelName(response.hotelName);
-            setHotelPrice(response.hotelPrice);
-            setHotelRoom(response.hotelRoom);
-            setArrivalDate(response.arrivalDate);
-            setDepartureDate(response.departureDate);
-            console.log(response);
-            getHotelPrice(response.hotelName, response.hotelRoom, response.arrivalDate, response.departureDate);
+          if (response || _hotelName) {
+            if (_hotelName.length > 1) {
+              setHotelName(_hotelName);
+              setHotelPrice('_hotelPrice');
+              setHotelRoom(_hotelRoom);
+              setArrivalDate(_arrivalDate);
+              setDepartureDate(_departureDate);
+              getHotelPrice(_hotelName, _hotelRoom, _arrivalDate, _departureDate);
+            } else {
+              setHotelName(response.hotelName);
+              setHotelPrice(response.hotelPrice);
+              setHotelRoom(response.hotelRoom);
+              setArrivalDate(response.arrivalDate);
+              setDepartureDate(response.departureDate);
+              console.log(response);
+              getHotelPrice(response.hotelName, response.hotelRoom, response.arrivalDate, response.departureDate);
+            }
           } else {
             handleSearchErrorClick();
             console.log('Response is undefined');
@@ -178,147 +200,53 @@ function App() {
             <div className="content-container">
 
               <div className="providers-list">
-                {/* <h3> Searching for a {hotelRoom} from {arrivalDate} to {departureDate} </h3> */}
-                <a className="provider-card-wrapper">
-                  {/* show the result of the gethotelprice function*/}
-                  {isLoading ? (
-                    <div className="provider-card">
-                      <div className="spinner-container" role="status">
-                        <ThreeDots
-                          color="#282c34"
-                          width="60"
-                        />
+                {[
+                  { url: tripRecievedUrl, logo: tripLogo, name: "Trip.com", price: tripRecievedPrice },
+                  { url: hotelsComRecievedUrl, logo: hotelsComLogo, name: "Hotels.com", price: hotelsComRecievedPrice },
+                  { url: expediaRecievedUrl, logo: expediaLogo, name: "Expedia", price: expediaRecievedPrice },
+                  { url: agodaRecievedUrl, logo: agodaLogo, name: "Agoda", price: agodaRecievedPrice },
+                ].map((provider, index) => (
+                  <a className="provider-card-wrapper" key={index}>
+                    {isLoading ? (
+                      <div className="provider-card">
+                        <div className="spinner-container" role="status">
+                          <ThreeDots color="#282c34" width="60" />
+                        </div>
                       </div>
-                    </div>
-                  ) : (
-                    <a className="provider-card" href={tripRecievedUrl} target="_blank">
-                      <div className="provider-logo-container">
-                        <img className="provider-image" src={tripLogo} alt="trip.com logo" />
-                      </div>
-                      <div className="provider-name">
-                        <text> Trip.com </text>
-                      </div>
-                      {/* if string over certain length reduce size of text */}
-                      <div className={`provider-price ${tripRecievedPrice.length > 5 ? 'smaller' : ''}`}>
-                        <text> {tripRecievedPrice} </text>
-                      </div>
-                      <div className="pointer-arrow-container">
-                        <img className="pointer-arrow" src={pointer} />
-                      </div>
-                    </a>
-                  )}
-                </a>
-                <a className="provider-card-wrapper">
-                  {/* show the result of the gethotelprice function*/}
-                  {isLoading ? (
-                    <div className="provider-card">
-                      <div className="spinner-container" role="status">
-                        <ThreeDots
-                          color="#282c34"
-                          width="60"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <a className="provider-card" href={hotelsComRecievedUrl} target="_blank">
-                      <div className="provider-logo-container">
-                        <img className="provider-image" src={hotelsComLogo} alt="hotels.com logo" />
-                      </div>
-                      <div className="provider-name">
-                        <text> Hotels.com </text>
-                      </div>
-                      <div className={`provider-price ${hotelsComRecievedPrice.length > 5 ? 'smaller' : ''}`}>
-                        <text> {hotelsComRecievedPrice} </text>
-                      </div>
-                      <div className="pointer-arrow-container">
-                        <img className="pointer-arrow" src={pointer} />
-                      </div>
-                    </a>
-                  )}
-                </a>
-                <a className="provider-card-wrapper">
-                  {/* show the result of the gethotelprice function*/}
-                  {isLoading ? (
-                    <div className="provider-card">
-                      <div className="spinner-container" role="status">
-                        <ThreeDots
-                          color="#282c34"
-                          width="60"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <a className="provider-card" href={expediaRecievedUrl} target="_blank">
-                      <div className="provider-logo-container">
-                        <img className="provider-image" src={expediaLogo} alt="hotels.com logo" />
-                      </div>
-                      <div className="provider-name">
-                        <text> Expedia </text>
-                      </div>
-                      <div className={`provider-price ${expediaRecievedPrice.length > 5 ? 'smaller' : ''}`}>
-                        <text> {expediaRecievedPrice} </text>
-                      </div>
-                      <div className="pointer-arrow-container">
-                        <img className="pointer-arrow" src={pointer} />
-                      </div>
-                    </a>
-                  )}
-                </a>
-                <div className="provider-card-wrapper">
-                  {/* show the result of the gethotelprice function*/}
-                  {isLoading ? (
-                    <div className="provider-card">
-                      <div className="spinner-container" role="status">
-                        <ThreeDots
-                          color="#282c34"
-                          width="60"
-                        />
-                      </div>
-                    </div>
-                  ) : (
-                    <a className="provider-card" href={agodaRecievedUrl} target='_blank'>
-                      <div className="provider-logo-container">
-                        <img className="provider-image" src={agodaLogo} alt="agoda logo" />
-                      </div>
-                      <div className="provider-name">
-                        <text> Agoda </text>
-                      </div>
-                      <div className={`provider-price ${agodaRecievedPrice.length > 5 ? 'smaller' : ''}`}>
-                        <text> {agodaRecievedPrice} </text>
-                      </div>
-                      <div className="pointer-arrow-container">
-                        <img className='pointer-arrow' src={pointer} />
-                      </div>
-                    </a>
-                  )}
-                </div>
+                    ) : (
+                      <a className="provider-card" href={provider.url} target="_blank">
+                        <div className="provider-logo-container">
+                          <img className="provider-image" src={provider.logo} alt={`${provider.name} logo`} />
+                        </div>
+                        <div className="provider-name">
+                          <text> {provider.name} </text>
+                        </div>
+                        <div className={`provider-price ${provider.price.length > 5 ? 'smaller' : ''}`}>
+                          <text> {provider.price} </text>
+                        </div>
+                        <div className="pointer-arrow-container">
+                          <img className="pointer-arrow" src={pointer} />
+                        </div>
+                      </a>
+                    )}
+                  </a>
+                ))}
                 <a className="provider-card-wrapper">
                   <a className="provider-card">
-                    <div className="provider-logo-container">
-                    </div>
+                    <div className="provider-logo-container"></div>
                     <div className="provider-name">
                       <text> {departureDate}, {hotelRoom} </text>
                     </div>
-                    <div className="provider-price">
-                    </div>
-                    <div className="pointer-arrow-container">
-                    </div>
+                    <div className="provider-price"></div>
+                    <div className="pointer-arrow-container"></div>
                   </a>
                 </a>
               </div>
+
               <div className="bottom-nav-container">
                 <img src={search} className="bottom-nav-item" alt="search icon" onClick={handleRecentsClick} />
                 <img src={house} className="bottom-nav-item" alt="home icon" />
-                {/* <Link to="/static/js/App.tsx"> */}
                 <img src={plus} className="bottom-nav-item" alt="plus icon" onClick={handlePlusClick} />
-                {/* </Link> */}
-                {/* <text>
-                  {hotelPrice}
-                </text>
-                {/* enter hotel name returned */}
-                {/* <text>
-                  {hotelName}
-                </text> */}
               </div>
             </div>
           </body>
