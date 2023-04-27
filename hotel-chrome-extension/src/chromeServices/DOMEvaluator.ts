@@ -11,13 +11,13 @@ const messagesFromReactAppListener = (msg: DOMMessage, sender: chrome.runtime.Me
     const tripDates = document.querySelectorAll(".m-date-text") as NodeListOf<HTMLElement>;
 
     const response: DOMMessageResponse = {
-      //get hotelname from element <span itemprop="name"></span>
+      //get hotelname from element 
       hotelName: (document.querySelector("[itemprop='name']") as HTMLElement).innerText,
 
-      //get hotel description from element <h2 class="l-room-type-label l-margin-top-double t-extend-h3 ">  </h2>
+      //get hotel room type from element 
       hotelRoom: (document.querySelector(".l-room-type-label") as HTMLElement).innerText,
 
-      //get hotelPrice from <span class="t-font-weight-bold t-font-mll t-line-height-xxl js-total-points-rate-value js-cash-and-point">  499.00  </span>
+      //get hotelPrice 
       hotelPrice: (document.querySelector(".js-total-points-rate-value") as HTMLElement).innerText,
 
       //get arrival date from element tripDates[0]
@@ -33,25 +33,24 @@ const messagesFromReactAppListener = (msg: DOMMessage, sender: chrome.runtime.Me
   } else if (window.location.href.includes('ihg')) {
     console.log('ihg.com');
 
-    // Selector queries for IHG website
+    // format the date string returned fromn the DOM
     const tripDates = (document.querySelector('[data-testid="dates-info"]') as HTMLElement).innerText;
     const [checkInDate, checkOutDate] = formatDate(tripDates);
 
     const response: DOMMessageResponse = {
       //get hotelname from element with class brand-name
       hotelName: (document.querySelector(".brand-name") as HTMLElement).innerText.trim(),
-      // hotelName: 'test name',
 
+      //get hotel price 
       hotelPrice: (document.querySelector('[data-testid="total-price"]') as HTMLElement).innerText.trim(),
-      // hotelPrice: 'test price',
-
+      
+      //get hotel room type
       hotelRoom: (document.querySelector('[data-testid="room-type-info"]') as HTMLElement).innerText.trim(),
-      // hotelRoom: 'test room',
 
+      // return the formatted dates
       arrivalDate: checkInDate.trim(),
 
       departureDate: checkOutDate.trim()
-
 
     };
 

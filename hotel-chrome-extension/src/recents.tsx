@@ -28,7 +28,19 @@ function Recent(props: Props) {
 
     const [recentSearches, setRecentSearches] = React.useState<{ hotelName: string; hotelRoom: string; arrivalDate: string; departureDate: string; }[]>([]);
 
+    const [hotelName, setHotelName] = React.useState("");
+    const [hotelRoom, setHotelRoom] = React.useState("");
+    const [arrivalDate, setArrivalDate] = React.useState("");
+    const [departureDate, setDepartureDate] = React.useState("");
 
+    // function to set the state variables based on the selected hotel
+    function setSelectedHotel(hotel: { hotelName: React.SetStateAction<string>; hotelRoom: React.SetStateAction<string>; arrivalDate: React.SetStateAction<string>; departureDate: React.SetStateAction<string>; }) {
+        setHotelName(hotel.hotelName);
+        setHotelRoom(hotel.hotelRoom);
+        setArrivalDate(hotel.arrivalDate);
+        setDepartureDate(hotel.departureDate);
+        setShowHome(!showHome);
+    }
 
     const handleHomeClick = () => {
         setShowHome(!showHome);
@@ -38,39 +50,35 @@ function Recent(props: Props) {
         setShowExtras(!showExtras);
     };
 
-    const initiateSearch = (i: number) => {
-        // open App.tsx and initiate rate search
-        setShowHome(!showHome);
-        props.getHotelPrice(recentSearches[i].hotelName, recentSearches[i].hotelRoom, recentSearches[i].arrivalDate, recentSearches[i].departureDate)
-    };
-
     // Retrieve data from the storage
     React.useEffect(() => {
         chrome.storage.local.get(null, function (items) {
             const itemsArray = Object.entries(items);
+            console.log(itemsArray);
+            // only retrieve the last 5 items
             const lastFiveItems = itemsArray.slice(-5);
 
             const searchData: { hotelName: string; hotelRoom: string; arrivalDate: string; departureDate: string; }[] = [];
+            // push the data into the searchData array
             lastFiveItems.forEach(([key, value]) => {
-
                 searchData.push({ hotelName: value.hotel_name, hotelRoom: value.hotel_room, arrivalDate: value.arrival_date, departureDate: value.departure_date });
-
             });
-
             console.log(searchData);
-            console.log(searchData[4].hotelName);
 
             setRecentSearches(searchData);
-
         });
     }, []);
-
-
 
     return (
         <div>
             {showHome ? (
-                <App />
+                // pass the selected hotel to the App component
+                <App
+                    _hotelName={hotelName}
+                    _hotelRoom={hotelRoom}
+                    _arrivalDate={arrivalDate}
+                    _departureDate={departureDate}
+                />
             ) : showExtras ? (
                 <Extras />
             ) : (
@@ -78,115 +86,35 @@ function Recent(props: Props) {
                     <body>
                         <div className="content-container">
                             <div className="providers-list">
-                                <a className="recents-card" onClick={() => initiateSearch(4)}>
-                                    <div className="search-text-wrapper">
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[4].hotelName}</text>}
+                                {/* Display recently found searches */}
+                                {[...Array(5)].map((_, index) => (
+                                    // initiate search with the selected hotel
+                                    <a className="recents-card" onClick={() => setSelectedHotel(recentSearches[index])}>
+                                        <div className="search-text-wrapper">
+                                            {recentSearches.length > index && (
+                                                <>
+                                                    <div className="search-text">
+                                                        Hotel Name: {recentSearches[index].hotelName}
+                                                    </div>
+                                                    <div className="search-text">
+                                                        Room Type: {recentSearches[index].hotelRoom}
+                                                    </div>
+                                                    <div className="search-text">
+                                                        Check-In: {recentSearches[index].arrivalDate}
+                                                    </div>
+                                                    <div className="search-text">
+                                                        Check-Out: {recentSearches[index].departureDate}
+                                                    </div>
+                                                </>
+                                            )}
                                         </div>
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[4].hotelRoom}</text>}
+                                        <div className="pointer-arrow-container">
+                                            <img className="pointer-arrow" src={pointer} />
                                         </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[4].arrivalDate}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[4].departureDate}</text>}
-                                        </div>
-                                    </div>
-                                    <div className="pointer-arrow-container">
-                                        <img className="pointer-arrow" src={pointer} />
-                                    </div>
-                                </a>
-                                <a className="recents-card" onClick={() => initiateSearch(3)}>
-                                    <div className="search-text-wrapper">
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[3].hotelName}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[3].hotelRoom}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[3].arrivalDate}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[3].departureDate}</text>}
-                                        </div>
-                                    </div>
-                                    <div className="pointer-arrow-container">
-                                        <img className="pointer-arrow" src={pointer} />
-                                    </div>
-                                </a>
-
-                                <a className="recents-card" onClick={() => initiateSearch(2)}>
-                                    <div className="search-text-wrapper">
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[2].hotelName}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[2].hotelRoom}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[2].arrivalDate}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[2].departureDate}</text>}
-                                        </div>
-                                    </div>
-                                    <div className="pointer-arrow-container">
-                                        <img className="pointer-arrow" src={pointer} />
-                                    </div>
-                                </a>
-
-                                <a className="recents-card" onClick={() => initiateSearch(1)}>
-                                    <div className="search-text-wrapper">
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[1].hotelName}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[1].hotelRoom}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[1].arrivalDate}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[1].departureDate}</text>}
-                                        </div>
-                                    </div>
-                                    <div className="pointer-arrow-container">
-                                        <img className="pointer-arrow" src={pointer} />
-                                    </div>
-                                </a>
-
-                                <a className="recents-card" onClick={() => initiateSearch(0)}>
-                                    <div className="search-text-wrapper">
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Hotel Name: {recentSearches[0].hotelName}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {recentSearches.length > 4 && <text> Room Type: {recentSearches[0].hotelRoom}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-In: {recentSearches[4].arrivalDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-In: {recentSearches[0].arrivalDate}</text>}
-                                        </div>
-                                        <div className="search-text">
-                                            {/* <text> Check-Out: {recentSearches[4].departureDate} </text> */}
-                                            {recentSearches.length > 4 && <text> Check-Out: {recentSearches[0].departureDate}</text>}
-                                        </div>
-                                    </div>
-                                    <div className="pointer-arrow-container">
-                                        <img className="pointer-arrow" src={pointer} />
-                                    </div>
-                                </a>
+                                    </a>
+                                ))}
                             </div>
+
                             <div className="bottom-nav-container">
                                 <img src={yellowSearch} className="bottom-nav-item" alt="search icon" />
                                 <img src={greyHouse} className="bottom-nav-item" alt="home icon" onClick={handleHomeClick} />

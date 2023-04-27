@@ -1,0 +1,215 @@
+.ball {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: #fff; /* Add a background color to hide the ball's background image */
+    box-shadow: 0 0 10px 2px #424242;
+    animation: moveX 2.5s linear 0s infinite alternate, moveY 3.4s linear 0s infinite alternate, spin 4s linear infinite;
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .ball img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+  }
+  
+
+.ballA {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: #fff; /* Add a background color to hide the ball's background image */
+    box-shadow: 0 0 10px 2px #424242;
+    animation: moveY 7s linear 0s infinite alternate, moveX 10s linear 0s infinite alternate, spin 1s linear infinite; 
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ballA img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+  }
+
+.ballB {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: #fff; /* Add a background color to hide the ball's background image */
+    box-shadow: 0 0 10px 2px #424242;
+    animation: moveY 8.9s linear 0s infinite alternate, moveX 12.9s linear 0s infinite alternate, spin 4s linear infinite; 
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ballB img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+  }
+
+.ballC {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: #fff; /* Add a background color to hide the ball's background image */
+    box-shadow: 0 0 10px 2px #424242;
+    animation: moveY 7.6s linear 0s infinite alternate, moveX 8.9s linear 0s infinite alternate, spin 1s linear infinite; 
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ballC img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+  }
+
+
+
+.ballD {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: #fff; /* Add a background color to hide the ball's background image */
+    box-shadow: 0 0 10px 2px #424242;
+    animation: moveY 5s linear 0s infinite alternate, moveX 6s linear 0s infinite alternate, spin 1s linear infinite; 
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ballD img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+  }
+
+.ballE {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: #fff; /* Add a background color to hide the ball's background image */
+    box-shadow: 0 0 10px 2px #424242;
+    animation: moveY 5.6s linear 0s infinite alternate, moveX 8s linear 0s infinite alternate, spin 1s linear infinite; 
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ballE img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+  }
+
+
+.ballF {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    border-radius: 100%;
+    background-color: #fff; /* Add a background color to hide the ball's background image */
+    box-shadow: 0 0 10px 2px #424242;
+    animation: moveY 7s linear 0s infinite alternate, moveX 6.5s linear 0s infinite alternate, spin 1s linear infinite; 
+    animation-fill-mode: both;
+    animation-direction: alternate;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.ballF img {
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 50%;
+  }
+
+/* div:hover {
+    background: #ff4e50;
+    background: -webkit-linear-gradient(to right, #ff4e50, #f9d423);
+    background: linear-gradient(to right, #40e0d0, #ff8c00, #ff0080);
+    cursor: pointer;
+    filter: blur(2px);
+    opacity: 1;
+} */
+
+
+
+@keyframes moveX {
+    from {
+        left: 0;
+    }
+
+    to {
+        left: 91%;
+    }
+}
+
+@keyframes moveY {
+    from {
+        top: 0;
+    }
+
+    to {
+        top: 75%;
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+        /*box-shadow: 0 0 10px 10px #424242;*/
+        opacity: 1;
+
+    }
+
+    50% {
+        transform: rotate(10deg);
+        /*box-shadow: 0 0 15px 10px #424242;*/
+        opacity: 1;
+
+    }
+
+    to {
+        transform: rotate(10deg);
+        /*box-shadow: 0 0 10px 10px #424242;*/
+        opacity: 1;
+
+
+    }
+}
+
+.provider-icons-wrapper {
+    display: flex;
+    height: 309.5px;
+    overflow: hidden;
+}
+
+body{
+    overflow: hidden;
+}
