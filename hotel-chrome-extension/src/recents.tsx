@@ -50,24 +50,32 @@ function Recent(props: Props) {
         setShowExtras(!showExtras);
     };
 
-    // Retrieve data from the storage
     React.useEffect(() => {
         chrome.storage.local.get(null, function (items) {
-            const itemsArray = Object.entries(items);
-            console.log(itemsArray);
-            // only retrieve the last 5 items
-            const lastFiveItems = itemsArray.slice(-5);
+            // filter out the keys that are not the uuids
+            const keys = Object.keys(items).filter(key => key.length > 10);
 
+            // sort the items by timestamp
+            const sortedItems = keys.map(key => items[key]).sort((a, b) => b.timestamp - a.timestamp);
+            const lastFiveItems = sortedItems.slice(0, 5);
             const searchData: { hotelName: string; hotelRoom: string; arrivalDate: string; departureDate: string; }[] = [];
-            // push the data into the searchData array
-            lastFiveItems.forEach(([key, value]) => {
-                searchData.push({ hotelName: value.hotel_name, hotelRoom: value.hotel_room, arrivalDate: value.arrival_date, departureDate: value.departure_date });
+            
+            // push the data to the searchData array
+            lastFiveItems.forEach(item => {
+                searchData.push({
+                    hotelName: item.hotel_name,
+                    hotelRoom: item.hotel_room,
+                    arrivalDate: item.arrival_date,
+                    departureDate: item.departure_date
+                });
             });
-            console.log(searchData);
 
+            console.log(searchData);
             setRecentSearches(searchData);
         });
     }, []);
+
+
 
     return (
         <div>

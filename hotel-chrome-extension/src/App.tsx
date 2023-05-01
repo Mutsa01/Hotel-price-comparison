@@ -105,19 +105,21 @@ function App(props: AppProps): JSX.Element {
               setIsLoading(false);
             }
           });
-          // write the search details to chrome storage
+          
           const searchDetails = {
             hotel_name: hotelName,
             hotel_room: hotelRoom,
             arrival_date: arrivalDate,
             departure_date: departureDate,
+            timestamp: new Date().getTime() // Add a new property with the current timestamp
           };
-
+          
           const uniqueKey = uuidv4();
-
+          
           chrome.storage.local.set({ [uniqueKey]: searchDetails }, () => {
             console.log('Search details saved');
           });
+          
 
         })
         .catch(error => {
