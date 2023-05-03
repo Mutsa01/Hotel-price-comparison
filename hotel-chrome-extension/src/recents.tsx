@@ -59,7 +59,7 @@ function Recent(props: Props) {
             const sortedItems = keys.map(key => items[key]).sort((a, b) => b.timestamp - a.timestamp);
             const lastFiveItems = sortedItems.slice(0, 5);
             const searchData: { hotelName: string; hotelRoom: string; arrivalDate: string; departureDate: string; }[] = [];
-            
+
             // push the data to the searchData array
             lastFiveItems.forEach(item => {
                 searchData.push({
@@ -97,7 +97,26 @@ function Recent(props: Props) {
                                 {/* Display recently found searches */}
                                 {[...Array(5)].map((_, index) => (
                                     // initiate search with the selected hotel
-                                    <a className="recents-card" onClick={() => setSelectedHotel(recentSearches[index])}>
+                                    <a className="recents-card" onClick={() => {
+                                        const today = new Date();
+                                        today.setHours(0, 0, 0, 0);
+
+                                        const arrivalDate = new Date(recentSearches[index].arrivalDate);
+                                        arrivalDate.setHours(0, 0, 0, 0);
+
+                                        if (arrivalDate < today) {
+                                            // add classes to make card shake and dates red
+                                            const card = document.getElementsByClassName("recents-card")[index];
+                                            card.classList.add("shake");
+                                            card.querySelectorAll(".search-text")[2].classList.add("red-text");
+                                            card.querySelectorAll(".search-text")[3].classList.add("red-text");
+                                        } else {
+                                            // initiate search with the selected hotel
+                                            setSelectedHotel(recentSearches[index]);
+                                            setShowHome(true);
+                                        }
+
+                                    }}>
                                         <div className="search-text-wrapper">
                                             {recentSearches.length > index && (
                                                 <>
