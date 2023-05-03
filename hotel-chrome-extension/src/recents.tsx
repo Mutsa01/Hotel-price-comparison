@@ -50,24 +50,32 @@ function Recent(props: Props) {
         setShowExtras(!showExtras);
     };
 
-    // Retrieve data from the storage
     React.useEffect(() => {
         chrome.storage.local.get(null, function (items) {
-            const itemsArray = Object.entries(items);
-            console.log(itemsArray);
-            // only retrieve the last 5 items
-            const lastFiveItems = itemsArray.slice(-5);
+            // filter out the keys that are not the uuids
+            const keys = Object.keys(items).filter(key => key.length > 10);
 
+            // sort the items by timestamp
+            const sortedItems = keys.map(key => items[key]).sort((a, b) => b.timestamp - a.timestamp);
+            const lastFiveItems = sortedItems.slice(0, 5);
             const searchData: { hotelName: string; hotelRoom: string; arrivalDate: string; departureDate: string; }[] = [];
-            // push the data into the searchData array
-            lastFiveItems.forEach(([key, value]) => {
-                searchData.push({ hotelName: value.hotel_name, hotelRoom: value.hotel_room, arrivalDate: value.arrival_date, departureDate: value.departure_date });
-            });
-            console.log(searchData);
 
+            // push the data to the searchData array
+            lastFiveItems.forEach(item => {
+                searchData.push({
+                    hotelName: item.hotel_name,
+                    hotelRoom: item.hotel_room,
+                    arrivalDate: item.arrival_date,
+                    departureDate: item.departure_date
+                });
+            });
+
+            console.log(searchData);
             setRecentSearches(searchData);
         });
     }, []);
+
+
 
     return (
         <div>
@@ -89,7 +97,26 @@ function Recent(props: Props) {
                                 {/* Display recently found searches */}
                                 {[...Array(5)].map((_, index) => (
                                     // initiate search with the selected hotel
-                                    <a className="recents-card" onClick={() => setSelectedHotel(recentSearches[index])}>
+                                    <a className="recents-card" onClick={() => {
+                                        const today = new Date();
+                                        today.setHours(0, 0, 0, 0);
+
+                                        const arrivalDate = new Date(recentSearches[index].arrivalDate);
+                                        arrivalDate.setHours(0, 0, 0, 0);
+
+                                        if (arrivalDate < today) {
+                                            // add classes to make card shake and dates red
+                                            const card = document.getElementsByClassName("recents-card")[index];
+                                            card.classList.add("shake");
+                                            card.querySelectorAll(".search-text")[2].classList.add("red-text");
+                                            card.querySelectorAll(".search-text")[3].classList.add("red-text");
+                                        } else {
+                                            // initiate search with the selected hotel
+                                            setSelectedHotel(recentSearches[index]);
+                                            setShowHome(true);
+                                        }
+
+                                    }}>
                                         <div className="search-text-wrapper">
                                             {recentSearches.length > index && (
                                                 <>
